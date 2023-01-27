@@ -1,0 +1,21 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+          <form action="/admin/edit-subcategory/<%= SubCategory._id %>" method="post">
+            <div class="col-md-6">
+              <div class="card mb-4">
+                <h5 class="card-header">Edit Sub Category</h5>
+                <div class="card-body">
+                  <div>
+                    <label for="defaultFormControlInput" class="form-label">Brand Name</label>
+                    <input type="text" class="form-control" name="name" value="<%= SubCategory.sub_name %>"
+                      aria-describedby="defaultFormControlHelp" required />
+                    <div class="my-3 text-left">
+                      <button type="submit" class="add btn btn-success">Submit</a>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </form>

@@ -1,0 +1,101 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="row">
+              <!-- Blockquote -->
+              <div class="col-lg-6">
+                <div class="card h-100">
+                  <h5 class="card-header">Order status</h5>
+                  <div class="card-body">
+                    <dl class="row mt-2">
+                      <dt class="col-sm-3">Order Id</dt>
+                      <dd class="col-sm-9">
+                        <%=order._id%>
+                      </dd>
+
+                      <dt class="col-sm-3">Status</dt>
+                      <dd class="col-sm-9">
+                        <%=order.status%>
+                      </dd>
+
+                      <dt class="col-sm-3">Payment Method</dt>
+                      <dd class="col-sm-9">
+                        <%=order.paymentMethod%>
+                      </dd>
+
+                      <dt class="col-sm-3">Date and Time</dt>
+                      <dd class="col-sm-9">
+                        <%=order.date.toLocaleDateString()%>
+                      </dd>
+
+                      <dt class="col-sm-3">Total Amount</dt>
+                      <dd class="col-sm-9">
+                        <%=order.total%>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-6">
+                <div class="card">
+                  <h5 class="card-header">Details</h5>
+                  <div class="card-body">
+                    <dl class="row mt-2">
+                      <dt class="col-sm-3">Name</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.First_Name%>
+                          <%=order.address.Last_Name%>
+                      </dd>
+
+                      <dt class="col-sm-3">Address</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Address%>
+                        <%=order.address.Address2%>
+                      </dd>
+
+                      <dt class="col-sm-3 text-truncate">Town/City</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Town%>
+                      </dd>
+
+                      <dt class="col-sm-3">State</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.State%>
+                      </dd>
+
+                      <dt class="col-sm-3">Country</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Country%>
+                      </dd>
+
+                      <dt class="col-sm-3">Pincode</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Pincode%>
+                      </dd>
+
+                      <dt class="col-sm-3">Phone</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Mobile%>
+                      </dd>
+
+                      <dt class="col-sm-3">Email</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Email%>
+                      </dd>
+
+                      <dt class="col-sm-3">Order notes</dt>
+                      <dd class="col-sm-9">
+                        <%=order.address.Notes%>
+                      </dd>
+                    </dl>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="content-backdrop fade"></div>
+        </div>

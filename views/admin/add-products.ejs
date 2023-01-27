@@ -1,0 +1,66 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <body class="bg-light">
+          <div class="container mt-4">
+            <div class="row">
+              <div class="col-md-6">
+                <h2 class="text-dark">Add Product</h2>
+                <form action="/admin/add-products" method="post" enctype="multipart/form-data">
+                  <label class="text-light" for="">Name</label>
+                  <input type="text" name="name" class="form-control" required>
+
+                  <label class="text-light" for="">Description</label>
+                  <input type="text" name="description" class="form-control" required>
+
+                  <label class="text-light" for="">Category</label>
+
+                  <select name="category" class="form-select">
+                    <% categories.forEach(function(category){%>
+                      <option value="<%=category.cat_name%>">
+                        <%=category.cat_name%>
+                      </option>
+                      <% }) %>
+                  </select>
+
+                  <label class="text-light" for="">Sub Category</label>
+
+                  <select name="brand_name" class="form-select">
+                    <% subCategories.forEach(function(category){%>
+                      <option value="<%=category._id%>">
+                        <%=category.sub_name%>
+                      </option>
+                      <% }) %>
+                  </select>
+
+                  <label class="text-light" for="">Price</label>
+                  <input type="number" name="price" class="form-control" required>
+
+                  <label class="text-light" id="imageInput" for="">Image</label>
+                  <input accept="image/*" type="file" name="image" class="form-control" multiple required>
+                  <!-- <button onclick="addMore()" type="button" class="btn btn-lightt">Add more...</button> -->
+                  <!-- <p id="demo"></p> -->
+
+                  <button class="btn btn-success float-end mt-1" type="button" onclick="addMore()"><iconify-icon icon="ic:baseline-plus"></iconify-icon></button>
+                  <script>
+                      function addMore(){
+                         let mainDiv=document.getElementById('imageInput')
+                         let newInput=document.createElement('div')
+                         newInput.innerHTML='<input type="file" class="form-control mt-3" id="" name="image"  accept="image/*" >'
+                         mainDiv.appendChild(newInput)
+                      }
+                  </script>
+
+                  <button type="submit" class="btn btn-success mt-4">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </body>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener("click", function addMore() {
+      document.getElementById("demo").innerHTML = "Hello World!";
+    });
+  </script>

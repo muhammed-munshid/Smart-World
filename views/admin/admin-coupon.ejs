@@ -1,0 +1,79 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="my-4 text-right">
+              <button type="button" class="add btn btn-success">
+                <a href="/admin/add-coupon" class="text-white">Add Coupon</a>
+                <iconify-icon icon="mdi:coupon-outline" class="fs-5"></iconify-icon>
+              </button>
+            </div>
+
+            <!-- Hoverable Table rows -->
+            <div class="card">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Coupon Name</th>
+                      <th>Coupon Code</th>
+                      <th>Discount Percentage</th>
+                      <th>Minimum Purchase amount</th>
+                      <th>Maximum Discount</th>
+                      <th>Created Date</th>
+                      <th>Expiry Date</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <% Coupon.forEach(function(coupon){%>
+                      <tr>
+                        <td>
+                          <strong>
+                            <%=coupon.name%>
+                          </strong>
+                        </td>
+                        <td>
+                          <%=coupon.code%>
+                        </td>
+                        <td>
+                          <%=coupon.discount%>
+                        </td>
+                        <td>
+                          <%=coupon.min_amount%>
+                        </td>
+                        <td>
+                          <%=coupon.max_discount%>
+                        </td>
+                        <td>
+                          <%=coupon.create_date%>
+                        </td>
+                        <td>
+                          <%=coupon.expiry_date%>
+                        </td>
+                        <td><a href="/admin/edit-coupon/<%=coupon._id%>" class="btn btn-info">Edit</a></td>
+                        <% if(coupon.is_deleted){%>
+                          <td>
+                            <form action="/admin/un-delete-coupon/<%=coupon._id%> " method="post">
+                              <button type="submit" class="btn btn-danger">Undo</button>
+                            </form>
+                          </td>
+                          <%}else{%>
+                            <td>
+                              <form action="/admin/delete-coupon/<%=coupon._id%> " method="post">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                              </form>
+                            </td>
+                            <%}%>
+                      </tr>
+                      <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--/ Hoverable Table rows -->
+          </div>
+          <div class="content-backdrop fade"></div>
+        </div>

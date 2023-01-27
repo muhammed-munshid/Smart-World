@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en">
+<%- include('../partials/user-header')%>
+
+	<body>
+		<section class="ftco-section">
+			<div class="container">
+				<div class="row justify-content-center">
+					<div class="col-md-12 col-lg-10">
+						<div class="wrap d-md-flex">
+							<div class="img" style="background-image: url(images/iphone-14-pro-.png)">
+							</div>
+							<div class="login-wrap p-4 p-md-5">
+								<div class="d-flex">
+									<div class="w-100">
+										<h3 class="mb-4 text-center">Change Password</h3>
+									</div>
+								</div>
+								<p class="text-center">We will send your password to the Email</p>
+
+								<form action="/reset" class="signin-form" method="post">
+
+									<div class="form-group mb-3">
+										<input type="email" class="form-control text-center" name="email"
+											placeholder="Your Email" required>
+									</div>
+
+									<div class="form-group mb-3">
+										<input type="password" class="form-control text-center" name="password"
+											placeholder="Your New Password" required>
+									</div>
+									<div class="form-group">
+										<button type="submit" class="form-control btn btn-info px-3">Submit</button>
+									</div>
+									<div class="form-group">
+										<button type="text" class="form-control px-3 border-white">
+											<a href="/login">Cancel</a>
+										</button>
+									</div>
+								</form>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		<%- include('../partials/user-header')%>
+	</body>
+
+</html>

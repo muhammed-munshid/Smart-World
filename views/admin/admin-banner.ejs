@@ -1,0 +1,58 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="my-4 text-right">
+              <button type="button" class="add btn btn-success">
+                <a href="/admin/add-banner" class="text-white">Add Banner</a>
+                <iconify-icon icon="material-symbols:image-outline-sharp" class="fs-5"></iconify-icon>
+              </button>
+            </div>
+            <!-- Hoverable Table rows -->
+            <div class="card">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>SI No</th>
+                      <th>Banner Image</th>
+                      <th>Description 1</th>
+                      <th>Description 2</th>
+                      <th>Description 3</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <% let index=1 %>
+                      <% banners.forEach(function(bannerImg){%>
+                        <tr>
+                          <td>
+                            <%= index++ %>
+                          </td>
+                          <td><img height="auto" width="120px" src="/images/productImages/<%=bannerImg.image[0]%>"
+                              alt=""></td>
+                          <td>
+                            <%=bannerImg.Des1%>
+                          </td>
+                          <td>
+                            <%=bannerImg.Des2%>
+                          </td>
+                          <td>
+                            <%=bannerImg.Des3%>
+                          </td>
+                          <td><a href="/admin/edit-banner/<%=bannerImg._id%>" class="btn btn-info">Edit</a></td>
+                          <td><a href="/admin/delete-banner/<%=bannerImg._id%>" class="btn btn-danger"
+                              onclick="return confirm('Are you want to delete ? ')">Delete</a></td>
+                        </tr>
+                        <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--/ Hoverable Table rows -->
+          </div>
+          <div class="content-backdrop fade"></div>
+        </div>

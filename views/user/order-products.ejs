@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<%- include('../partials/user-header')%>
+
+    <body>
+        <!-- Page Preloder -->
+
+        <!-- Header Section Begin -->
+        <%- include('../partials/head')%>
+            <!-- Header Section End -->
+
+            <!-- Breadcrumb Section Begin -->
+            <section class="breadcrumb-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="breadcrumb__text">
+                                <h4>Order Details</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Breadcrumb Section End -->
+
+            <!-- Shopping Cart Section Begin -->
+            <section class="product spad">
+                <div class="container">
+
+                    <!-- Content wrapper -->
+                    <div class="content-wrapper">
+                        <!-- Content -->
+
+                        <div class="container-xxl flex-grow-1 container-p-y">
+                            <div class="row">
+                                <!-- Blockquote -->
+                                <div class="col-lg-6">
+                                    <div class="card h-100">
+                                        <h6 class="card-header">Product Details</h6>
+                                        <div class="card-body">
+                                            <dl class="row mt-2">
+                                                <dt class="col-sm-3">Order Id</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order._id%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Status</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.status%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Payment Method</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.paymentMethod%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Date and Time</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.date%>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-6">
+                                    <div class="card">
+                                        <h5 class="card-header">Details</h5>
+                                        <div class="card-body">
+                                            <dl class="row mt-2">
+                                                <dt class="col-sm-3">Name</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.First_Name%>
+                                                        <%=order.address.Last_Name%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Address</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Address%>
+                                                        <%=order.address.Address2%>
+                                                </dd>
+
+                                                <dt class="col-sm-3 text-truncate">Town/City</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Town%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">State</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.State%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Country</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Country%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Pincode</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Pincode%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Phone</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Mobile%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Email</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Email%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Order notes</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.address.Notes%>
+                                                </dd>
+                                            </dl>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="content-backdrop fade"></div>
+                    </div>
+
+
+
+
+                    <section class="shopping-cart spad">
+                        <div class="container">
+                            <div class="row">
+                                <div class="col-lg-12">
+                                    <div class="shopping__cart__table">
+                                        <table class="table align-middle">
+                                            <thead>
+                                                <tr>
+                                                    <th>Product</th>
+                                                    <th>Price</th>
+                                                    <th>Quantity</th>
+                                                    <th>Discount</th>
+                                                    <th>Total</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr>
+                                                    <% let items=order.products %>
+                                                        <% items.forEach(function(product){%>
+                                                            <td>
+                                                                <%= product.productName %>
+                                                            </td>
+                                                            <td>
+                                                                <%= product.productPrice %>
+                                                            </td>
+                                                            <td>
+                                                                <%= product.quantity %>
+                                                            </td>
+                                                        <% }) %>
+                                                            <td>
+                                                                <%= order.discount %>
+                                                            </td>
+                                                        <% items.forEach(function(product){%>
+                                                            <td>
+                                                                <%= product.productPrice %>
+                                                            </td>
+                                                        <% }) %>
+                                                </tr>
+                                                <tr>
+                                                    <td>Grand Total</td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td></td>
+                                                    <td>
+                                                        <%= order.total %>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </section>
+            <!-- Shopping Cart Section End -->
+            <%- include('../partials/user-footer')%>
+    </body>
+
+</html>

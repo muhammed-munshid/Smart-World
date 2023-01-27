@@ -1,0 +1,71 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+
+            <!-- Hoverable Table rows -->
+            <div class="card">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Order ID</th>
+                      <th>User Name</th>
+                      <th>Place</th>
+                      <th>Mobile</th>
+                      <th>Amount</th>
+                      <th>Details</th>
+                      <th>Status</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <% Orders.forEach(function(order){%>
+                      <tr>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
+                          <strong>
+                            <%=order._id%>
+                          </strong>
+                        </td>
+                        <td>
+                          <%=order.address.First_Name%>
+                          <%=order.address.Last_Name%>
+                        </td>
+                        <td><%=order.address.Town%></td>
+                        <td>
+                          <%=order.address.Mobile%>
+                        </td>
+                        <td>
+                          <%=order.total%>
+                        </td>
+                        <td>
+                          <button type="button" class="px-3 py-1 btn btn-info">
+                            <a href="/admin/view-order/<%=order._id%>" class="text-white">View</a>
+                          </button>
+                        </td>
+                        <td>
+                          <select id="OStatus" style="width: 7.5rem;" onchange="statusOrder('<%=order._id%>')"
+                            class=" custom-select font-weight-bold bg-transparent text-info border-0 "
+                            name="orderStatus">
+          
+                            <option value="<%= order.status %>">
+                                <%= order.status %>
+                            </option>
+                            <option class="text-dark font-weight-bold" value="Placed">Placed</option>
+                            <option class="text-dark font-weight-bold" value="Processed">Processed</option>
+                            <option class="text-dark font-weight-bold" value="Shipped">Shipped</option>
+                            <option class="text-dark font-weight-bold" value="Delivered">Delivered</option>
+                          </select>
+                        </td>
+                      </tr>
+                      <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--/ Hoverable Table rows -->
+          </div>
+          <div class="content-backdrop fade"></div>
+        </div>

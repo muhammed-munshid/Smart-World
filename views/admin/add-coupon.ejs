@@ -1,0 +1,35 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <body class="bg-light">
+          <div class="container mt-4">
+            <div class="row">
+              <div class="col-md-6">
+                <h2 class="text-dark">Add Coupon</h2>
+                <form action="/admin/add-coupon" method="post">
+
+                  <label class="text-light" for="">Coupon Name</label>
+                  <input type="text" name="name" class="form-control">
+
+                  <label class="text-light" for="">Coupon Code</label>
+                  <input type="text" name="code" class="form-control">
+
+                  <label class="text-light" for="">Discount Percentage</label>
+                  <input type="number" name="discount" class="form-control">
+
+                  <label class="text-light" for="">Minimum Percentage Amount</label>
+                  <input type="number" name="min_amount" class="form-control">
+
+                  <label class="text-light" for="">Maximum Discount</label>
+                  <input type="number" name="max_discount" class="form-control">
+
+                  <label class="text-light" for="">Create Date</label>
+                  <input type="date" name="create_date" class="form-control">
+
+                  <label class="text-light" for="">Expiry Date</label>
+                  <input type="date" name="expiry_date" class="form-control">
+
+                  <button type="submit" class="btn btn-success mt-4">Submit</button>
+                </form>
+              </div>
+            </div>
+          </div>

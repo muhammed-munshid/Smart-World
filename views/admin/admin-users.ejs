@@ -1,0 +1,55 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+
+            <!-- Hoverable Table rows -->
+            <div class="card">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Name</th>
+                      <th>Email</th>
+                      <th>Phone No</th>
+                      <th></th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <% users.forEach(function(user){%>
+                      <tr>
+                        <td><i class="fab fa-angular fa-lg text-danger me-3"></i>
+                          <strong>
+                            <%=user.Name%>
+                          </strong>
+                        </td>
+                        <td>
+                          <%=user.Email%>
+                        </td>
+                        <td>
+                          <%=user.Mobile%>
+                        </td>
+                        <td>
+                          <% if(user.block){%>
+                            <form action="/admin/userUnblock/<%= user._id %> " method="post">
+                              <button type="submit" class="px-3 py-1 btn btn-danger">UnBlock</button>
+                            </form>
+                            <%}else{%>
+                              <form action="/admin/userBlock/<%= user._id %> " method="post">
+                                <button type="submit" class="px-3 py-1 btn btn-danger">Block</button>
+                              </form>
+                              <%}%>
+                        </td>
+                      </tr>
+                      <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--/ Hoverable Table rows -->
+          </div>
+          <div class="content-backdrop fade"></div>
+        </div>

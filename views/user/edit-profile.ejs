@@ -1,0 +1,55 @@
+<%- include('../partials/user-header')%>
+
+    <body style="background-color: rgb(225, 225, 225);">
+        <div class="content-wrapper">
+            <div class="container-fluid">
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card-2">
+                            <div class="card-body" style="padding-left: 524px;">
+                                <br><br><br><br>
+                                <h3 class="text-center">Edit Profile</h3>
+                                <br>
+                                <form action="/updateProfile/<%= profile._id %>" method="post">
+                                    <div class="form-group">
+                                        <label for="input-1">Name</label>
+                                        <input type="text" class="form-control" required name="name" id="input-1"
+                                            value="<%= profile.Name %>" placeholder="Enter Your Name">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-2">Email</label>
+                                        <input type="email" name="email" required value="<%= profile.Email %>"
+                                            class="form-control" id="input-2" placeholder="Enter Your Email Address">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="input-3">Mobile</label>
+                                        <input type="text" class="form-control" required value="<%= profile.Mobile %>"
+                                            name="mobile" id="input-3" placeholder="Enter Your Mobile Number">
+                                    </div>
+                                    <div class="form-group">
+                                        <button type="submit" class="btn btn-light px-5">
+                                            Edit Profile</button>
+                                    </div>
+                                    <br>
+                                    <br>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--End Row-->
+
+                <!--start overlay-->
+                <div class="overlay toggle-menu"></div>
+                <!--end overlay-->
+
+            </div>
+            <!-- End container-fluid-->
+
+        </div>
+    </body>
+    <%- include('../partials/user-footer')%>
+
+        </html>

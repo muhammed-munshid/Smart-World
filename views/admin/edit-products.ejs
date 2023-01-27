@@ -1,0 +1,56 @@
+<%- include('../partials/admin-sidebar')%>
+
+  <body class="bg-light">
+    <div class="container mt-4">
+      <div class="row">
+        <div class="col-md-6">
+          <h2 class="text-dark">Edit Product</h2>
+          <form action="/admin/edit-products/<%=products._id%>" method="post" enctype="multipart/form-data">
+            <label class="text-light" for="">Name</label>
+            <input type="text" name="name" class="form-control" value="<%=products.name%>">
+
+            <label class="text-light" for="">Description</label>
+            <input type="text" name="description" class="form-control" value="<%=products.description%>">
+
+            <label class="text-light" for="">Category</label>
+            <select name="category" class="form-select">
+              <% categories.forEach(function(category){%>
+                <option value="<%=category.cat_name%>">
+                  <%=category.cat_name%>
+                </option>
+                <% }) %>
+            </select>
+
+            <label class="text-light" for="">Brand</label>
+            <select name="brand_name" class="form-select">
+              <% subCategories.forEach(function(category){%>
+                <option value="<%=category._id%>">
+                  <%=category.sub_name%>
+                </option>
+                <% }) %>
+            </select>
+
+            <label class="text-light" for="">Price</label>
+            <input type="number" name="price" class="form-control" value="<%=products.price%>">
+
+            <label class="text-light" for="">Image</label>
+            <img src="/images/productImages/<%=products.image[0]%>" alt="Nil" width="100px" height="auto">
+            <input type="file" name="image" class="form-control" multiple>
+
+            <label class="text-light" for="">Image</label>
+            <img src="/images/productImages/<%=products.image[1]%>" alt="" width="100px" height="auto">
+            <input type="file" name="image" class="form-control" multiple>
+
+            <label class="text-light" for="">Image</label>
+            <img src="/images/productImages/<%=products.image[2]%>" alt="" width="100px" height="auto">
+            <input type="file" name="image" class="form-control" multiple>
+
+            <label class="text-light" for="">Image</label>
+            <img src="/images/productImages/<%=products.image[3]%>" alt="" width="100px" height="auto">
+            <input type="file" name="image" class="form-control" multiple>
+
+            <button type="submit" class="btn btn-success mt-4">Submit</button>
+          </form>
+        </div>
+      </div>
+    </div>

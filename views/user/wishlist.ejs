@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="zxx">
+<%- include('../partials/user-header')%>
+
+    <body>
+        <!-- Page Preloder -->
+        <!-- <div id="preloder">
+        <div class="loader"></div>
+    </div> -->
+
+        <!-- Header Section Begin -->
+        <%- include('../partials/head')%>
+            <!-- Header Section End -->
+
+            <!-- Breadcrumb Section Begin -->
+            <section class="breadcrumb-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="breadcrumb__text">
+                                <h4>Wishlist</h4>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Breadcrumb Section End -->
+
+            <!-- Shopping Cart Section Begin -->
+            <section class="shopping-cart spad">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="shopping__cart__table">
+                                <table>
+                                    <thead>
+                                        <tr>
+                                            <th>Product Name</th>
+                                            <th>Price</th>
+                                            <th>Category</th>
+                                            <th>Add to Cart</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <% let items=wishlist.items %>
+                                            <% items.forEach(function(wish){%>
+                                                <tr>
+                                                    <td class="product__cart__item">
+                                                        <div class="product__cart__item__text">
+                                                            <h5>
+                                                                <%=wish.productName%>
+                                                            </h5>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <h5>
+                                                            <%=wish.productPrice%>
+                                                        </h5>
+                                                    </td>
+                                                    <td>
+                                                        <%=wish.productCategory%>
+                                                    </td>
+                                                    <td><a onclick="wishtoCart('<%=wish.products%>','<%=wish.productName%>','<%=wish.productPrice%>','<%=wish.productImage%>')"
+                                                            href=""><i class="fa fa-shopping-cart new-cart text-dark"
+                                                                aria-hidden="true"></i></a></td>
+                                                    <td class="cart__close"><a
+                                                            onclick="deleteWish('<%=wish.products%>')" href=""><i
+                                                                class="fa fa-close"></i></a></td>
+                                                </tr>
+                                                <% }) %>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <div class="row">
+                                <div class="col-lg-9 col-md-9 col-sm-9">
+                                </div>
+                                <div class="col-lg-3 col-md-3 col-sm-3">
+                                    <div class="continue__btn">
+                                        <a href="/">Continue Shopping</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Shopping Cart Section End -->
+
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+            <script>
+
+                async function deleteWish(proId) {
+                    $.ajax({
+                        url: `/delete-wish/${proId}`,
+                        method: "get",
+                        success: (response) => {
+                            if (response.deleted) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: " Deleted!",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: false
+                                });
+                            }
+                        }
+                    })
+                }
+            </script>
+
+            <script>
+                async function wishtoCart(proId, productName, productPrice, productImage, total) {
+                    $.ajax({
+                        url: `/wishtoCart/${proId}`,
+                        data: {
+                            name: productName,
+                            price: productPrice,
+                            image: productImage
+                        },
+                        method: "post",
+                        success: (response) => {
+                            if (response.added) {
+                                deleteWish(proId)
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: " Added ",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true,
+                                });
+                                if (showConfirmButton) {
+                                    window.location.href = '/cart'
+                                }
+                            } else if (response.exist) {
+                                Swal.fire({
+                                    position: "right-end",
+                                    icon: "success",
+                                    title: " already exist",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true
+                                });
+
+                            }
+                        }
+                    })
+                }
+            </script>
+            <%- include('../partials/user-footer')%>
+    </body>
+
+</html>

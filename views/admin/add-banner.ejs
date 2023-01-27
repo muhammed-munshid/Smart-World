@@ -1,0 +1,38 @@
+<%- include('../partials/admin-sidebar')%>
+
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        <!-- Content -->
+
+        <div class="container-xxl flex-grow-1 container-p-y">
+            <form action="/admin/add-banner" method="post" enctype="multipart/form-data">
+                <div class="col-md-6">
+                    <div class="card mb-4">
+                        <h5 class="card-header">Banner</h5>
+                        <div class="card-body">
+                            <div>
+                                <label class="text-light" for="">Description 1</label>
+                                <input type="text" name="des1" class="form-control">
+                                <label class="text-light" for="">Description 2</label>
+                                <input type="text" name="des2" class="form-control">
+                                <label class="text-light" for="">Description 3</label>
+                                <input type="text" name="des3" class="form-control">
+                                <label for="defaultFormControlInput" class="form-label">Banner Image</label>
+                                <input type="file" class="form-control" placeholder="Image" name="image"
+                                    accept="image/*" aria-describedby="defaultFormControlHelp" multiple required />
+                                <div class="my-3 text-left">
+                                    <button type="submit" class="add btn btn-success">Add Image</a>
+                                        <iconify-icon icon="material-symbols:image-outline-sharp"
+                                            class="fs-5"></iconify-icon>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+    </div>
+    </div>
+    </div>

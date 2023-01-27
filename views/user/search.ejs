@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="zxx">
+
+<%- include('../partials/user-header')%>
+
+    <body>
+        <!-- Page Preloder -->
+        <!-- <div id="preloder">
+            <div class="loader"></div>
+        </div> -->
+
+        <!-- Header Section Begin -->
+        <%- include('../partials/head')%>
+            <!-- Header Section End -->
+
+            <!-- Breadcrumb Section Begin -->
+            <section class="breadcrumb-option">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-12">
+                            <div class="breadcrumb__text">
+                                <h4>Shop</h4>
+                                <div class="breadcrumb__links">
+                                    <a href="/">Home</a>
+                                    <span>Shop</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+            <!-- Breadcrumb Section End -->
+
+            <!-- Shop Section Begin -->
+            <section class="shop spad">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-3">
+                            <div class="shop__sidebar">
+                                <div class="shop__sidebar__search">
+                                    <form action="/search" method="post">
+                                        <input type="text" name="search" placeholder="Search...">
+                                        <button type="submit"><span class="icon_search"></span></button>
+                                    </form>
+                                </div>
+                                <div class="shop__sidebar__accordion">
+                                    <div class="accordion" id="accordionExample">
+                                        <div class="card">
+                                            <div class="card-heading">
+                                                <a data-toggle="collapse" data-target="#collapseOne">Categories</a>
+                                            </div>
+                                            <div id="collapseOne" class="collapse show" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <div class="shop__sidebar__categories">
+                                                        <dl class="nice-scroll">
+
+                                                            <% categories.forEach(function(category){%>
+                                                                <% if (categoryName==category.cat_name) { %>
+                                                                    <dt class=""><a class="text-dark"
+                                                                            href="/shop/<%=category.cat_name%>">
+                                                                            <%=category.cat_name%>
+                                                                        </a></dt>
+                                                                    <%} else { %>
+                                                                        <dd><a href="/shop/<%=category.cat_name%>">
+                                                                                <%=category.cat_name%>
+                                                                            </a></dd>
+                                                                        <% } %>
+                                                                            <% }) %>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-heading">
+                                                <a data-toggle="collapse" data-target="#collapseTwo">Branding</a>
+                                            </div>
+                                            <div id="collapseTwo" class="collapse show" data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <div class="shop__sidebar__brand">
+                                                        <dl>
+                                                            <% subCategories.forEach(function(subCategory){%>
+                                                                <% if (brands==subCategory._id) { %>
+                                                                    <dt><a class="text-dark"
+                                                                            href="/shop/<%=subCategory._id%>?brand=<%=subCategory._id%>">
+                                                                            <%=subCategory.sub_name%>
+                                                                        </a></dt>
+                                                                    <%} else { %>
+                                                                        <dd><a
+                                                                                href="/shop/<%=subCategory._id%>?brand=<%=subCategory._id%>">
+                                                                                <%=subCategory.sub_name%>
+                                                                            </a></dd>
+                                                                        <% } %>
+                                                                            <% }) %>
+                                                        </dl>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="card">
+                                            <div class="card-heading">
+                                                <a data-toggle="collapse" data-target="#collapseThree">Filter Price</a>
+                                            </div>
+                                            <div id="collapseThree" class="collapse show"
+                                                data-parent="#accordionExample">
+                                                <div class="card-body">
+                                                    <div class="shop__sidebar__price">
+                                                        <ul>
+                                                            <li><a href="/shop?sort=all">All</a></li>
+                                                            <li><a href="/shop?sort=10,000-20,000">10,000.00 -
+                                                                    20,000.00</a></li>
+                                                            <li><a href="/shop?sort=20,000-40,000">20,000.00 -
+                                                                    40,000.00</a></li>
+                                                            <li><a href="/shop?sort=40,000-50,000">40,000.00 -
+                                                                    50,000.00</a></li>
+                                                            <li><a href="/shop?sort=50,000-1,00,000">50,000.00 -
+                                                                    1,00,000.00</a></li>
+                                                            <li><a href="/shop?sort=1,00,000+">1,00,000.00+</a></li>
+                                                        </ul>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-9">
+                            <!-- <div class="shop__product__option">
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="shop__product__option__left">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6">
+                                        <div class="shop__product__option__right">
+                                            <p>Sort by Price:</p>
+                                            <select>
+                                                <option> <a href="/shop?sort=ascending">Low To High</a> </option></a>
+                                                <option> <a href="/shop?sort=descending">High To Low</a></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+                            <% if (search.length>0) { %>
+                                <div class="row">
+                                    <% search.forEach(function(product){%>
+                                        <div class="col-lg-4 col-md-6 col-sm-6">
+                                            <div class="product__item">
+                                                <div class="product__item__pic set-bg text-center">
+                                                    <a href="/product-details/<%=product._id%>"><img height="250px"
+                                                            src="/images/productImages/<%=product.image[0]%>"
+                                                            alt=""></a>
+                                                    <ul class="product__hover">
+                                                        <li><a onclick="addtoWishlist('<%=product._id%>','<%=product.name%>','<%=product.price%>','<%=product.category%>')"
+                                                                href=""><img src="images/icon/heart.png" alt=""></a>
+                                                        </li>
+                                                        </li>
+                                                        <li><a href="/product-details/<%=product._id%>"><img
+                                                                    src="images/icon/search.png" alt=""></a></li>
+                                                    </ul>
+                                                </div>
+                                                <div class="product__item__text">
+                                                    <h6 class="text-center">
+                                                        <%=product.name%>
+                                                    </h6>
+                                                    <a onclick="addtoCart('<%=product._id%>','<%=product.name%>','<%=product.price%>')"
+                                                        href="#" class="add-cart">+ Add To Cart</a>
+                                                    <h5 class="text-center">
+                                                        ₹<%=product.price%>
+                                                    </h5>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <% }) %>
+                                </div>
+                                <%} else { %>
+                                    <div class="wrapper">
+                                        <div class="container-new">
+                                            <div class="">
+                                                <div class="text-center">
+                                                    <iconify-icon class="smile"
+                                                        icon="ph:smiley-sad-light"></iconify-icon>
+                                                    <h2 class="typing px-spc-b-20">Sorry, your searching product is not
+                                                        available</h2>
+                                                    <span class="span px-spc-b-20">If you want to back, Please click
+                                                        link below</span>
+                                                    <a href="/shop" class="go-home"><i
+                                                            class="fa fa-shopping-cart go-home-icon"
+                                                            aria-hidden="true"></i>Go Shop</a>
+                                                </div>
+                                                <div class="">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <% } %>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </section>
+            <!-- Shop Section End -->
+            <%- include('../partials/user-footer')%>
+    </body>
+
+</html>

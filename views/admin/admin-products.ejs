@@ -1,0 +1,80 @@
+<%- include('../partials/admin-sidebar')%>
+
+        <!-- Content wrapper -->
+        <div class="content-wrapper">
+          <!-- Content -->
+
+          <div class="container-xxl flex-grow-1 container-p-y">
+            <div class="my-4 text-right">
+              <button type="button" class="add btn btn-success">
+                <a href="/admin/add-products" class="text-white">Add Product</a>
+                <iconify-icon icon="material-symbols:add-shopping-cart-sharp" class="fs-5"></iconify-icon>
+              </button>
+            </div>
+
+            <!-- Hoverable Table rows -->
+            <div class="card">
+              <div class="table-responsive text-nowrap">
+                <table class="table table-hover">
+                  <thead>
+                    <tr>
+                      <th>Products</th>
+                      <th>Image</th>
+                      <th>Description</th>
+                      <th>Category</th>
+                      <th>Brand Name</th>
+                      <th>Price</th>
+                    </tr>
+                  </thead>
+                  <tbody class="table-border-bottom-0">
+                    <% products.forEach(function(product){%>
+
+                      <tr>
+                        <td>
+                          <strong>
+                            <%=product.name%>
+                          </strong>
+                        </td>
+                        <td>
+                          <img height="auto" width="120px" src="/images/productImages/<%=product.image[0]%>" alt="">
+                        </td>
+                        <td>
+                          <%=product.description%>
+                        </td>
+                        <td>
+                          <%=product.category%>
+                        </td>
+
+                        <td>
+                          <%=product.brand.sub_name%>
+                        </td>
+
+                        <td>
+                          ₹<%=product.price%>
+                        </td>
+                        <td>
+                          <button type="button" class="px-3 py-1 btn btn-info">
+                            <a href="/admin/edit-products/<%=product._id%>" class="text-white">Edit</a>
+                          </button>
+                        </td>
+                        <td>
+                          <% if(product.block){%>
+                            <form action="/admin/productUnblock/<%= product._id %> " method="post">
+                              <button type="submit" class="px-3 py-1 btn btn-primary">List</button>
+                            </form>
+                            <%}else{%>
+                              <form action="/admin/productBlock/<%= product._id %> " method="post">
+                                <button type="submit" class="px-3 py-1 btn btn-primary">Unlist</button>
+                              </form>
+                              <%}%>
+                        </td>
+                      </tr>
+                      <% }) %>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <!--/ Hoverable Table rows -->
+          </div>
+          <div class="content-backdrop fade"></div>
+        </div>

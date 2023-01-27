@@ -1,0 +1,167 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>Smart world
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Free HTML5 Website Template by gettemplates.co" />
+    <meta name="keywords"
+        content="free website templates, free html5, free template, free bootstrap, free website template, html5, css3, mobile first, responsive" />
+    <meta name="author" content="gettemplates.co" />
+
+    <!-- Facebook and Twitter integration -->
+    <meta property="og:title" content="" />
+    <meta property="og:image" content="" />
+    <meta property="og:url" content="" />
+    <meta property="og:site_name" content="" />
+    <meta property="og:description" content="" />
+    <meta name="twitter:title" content="" />
+    <meta name="twitter:image" content="" />
+    <meta name="twitter:url" content="" />
+    <meta name="twitter:card" content="" />
+
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/animate.css">
+    <!-- Icomoon Icon Fonts-->
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/icomoon.css">
+    <!-- Bootstrap  -->
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/bootstrap.css">
+
+    <!-- Flexslider  -->
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/flexslider.css">
+
+    <!-- Owl Carousel  -->
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/owl.carousel.min.css">
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/owl.theme.default.min.css">
+
+    <!-- Theme style  -->
+    <link rel="stylesheet" href="/stylesheets/user/homestyle/style.css">
+
+    <!-- Modernizr JS -->
+    <script src="/javascripts/user/homejs/modernizr-2.6.2.min.js"></script>
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/css/bootstrap.min.css"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.9.1/font/bootstrap-icons.css">
+
+    <link rel="stylesheet" href="/stylesheets/user/profile/style.css">
+</head>
+
+<%- include('../partials/user-header')%>
+
+    <section class="shopping-cart spad">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h4 class="checkout__title">Your Orders</h4>
+                    <div class="shopping__cart__table">
+
+                        <table class="table align-middle">
+                            <thead>
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Address</th>
+                                    <th>Pincode</th>
+                                    <th>Mobile</th>
+                                    <th>Amount</th>
+                                    <th>Payment</th>
+                                    <th>Status</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% orders.forEach(function(order){%>
+                                    <% if (order.paymentMethod=='COD' ) { %>
+                                    <form action="/order-products/<%= order._id %>" method="post">
+                                        <tr>
+                                            <td>
+                                                <%= order.date.toLocaleDateString() %>
+                                            </td>
+                                            <td>
+                                                <%= order.address.Address %>
+                                            </td>
+                                            <td>
+                                                <%= order.address.Pincode %>
+                                            </td>
+                                            <td>
+                                                <%= order.address.Mobile %>
+                                            </td>
+                                            <td>
+                                                <%= order.total %>
+                                            </td>
+                                            <td>
+                                                <%= order.paymentMethod %>
+                                            </td>
+                                            <td>
+                                                <%= order.status %>
+                                            </td>
+                                            <td>
+                                                <button type="submit" class="btn btn-success" href="">View</button></td>
+                                        </tr>
+                                    </form>
+                                        <% } else if (order.paymentMethod=='online' ) { %>
+                                        <form action="/order-products/<%= order._id %>" method="post">
+                                            <tr>
+                                                <td>
+                                                    <%= order.date.toLocaleDateString() %>
+                                                </td>
+                                                <td>
+                                                    <%= order.address.Address %>
+                                                </td>
+                                                <td>
+                                                    <%= order.address.Pincode  %>
+                                                </td>
+                                                <td>
+                                                    <%= order.address.Mobile %>
+                                                </td>
+                                                <td>
+                                                    <%= order.total %>
+                                                </td>
+                                                <td>
+                                                    <%= order.paymentMethod %>
+                                                </td>
+                                                <td>
+                                                    <%= order.status %>
+                                                </td>
+                                                <td>
+                                                    <button type="submit" class="btn btn-success" href="">View</button></td>
+                                            </tr>
+                                        </form>
+                                            <% } %>
+                                                <% }) %>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- jQuery -->
+    <script src="/javascripts/user/homejs/jquery.min.js"></script>
+    <!-- jQuery Easing -->
+    <script src="/javascripts/user/homejs/jquery.easing.1.3.js"></script>
+    <!-- Bootstrap -->
+    <script src="/javascripts/user/homejs/bootstrap.min.js"></script>
+    <!-- Waypoints -->
+    <script src="/javascripts/user/homejs/jquery.waypoints.min.js"></script>
+    <!-- Carousel -->
+    <script src="/javascripts/user/homejs/owl.carousel.min.js"></script>
+    <!-- countTo -->
+    <script src="/javascripts/user/homejs/jquery.countTo.js"></script>
+    <!-- Flexslider -->
+    <script src="/javascripts/user/homejs/jquery.flexslider-min.js"></script>
+    <!-- Main -->
+    <script src="/javascripts/user/homejs/main.js"></script>
+
+
+    <!-- Payment  -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <!-- <script src="https://code.jquery.com/jquery-3.6.1.min.js"
+    integrity="sha256-o88AwQnZB+VDvE9tvIXrMQaPlFFSUTR+nldQm1LuPXQ=" crossorigin="anonymous"></script> -->
+    <script src="/javascripts/user/payment/jQuery.js"></script>

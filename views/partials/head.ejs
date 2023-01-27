@@ -1,0 +1,96 @@
+<header class="header">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-3 col-md-3">
+                <div class="header__logo">
+                    <a href="/"><img height="30px" width="180px" src="/images/smart-world.png" alt=""></a>
+                </div>
+            </div>
+            <div class="col-lg-6 col-md-6">
+                <nav class="header__menu mobile-menu">
+                    <ul>
+                        <% if (home) { %>
+                            <li class="active"><a href="/">Home</a></li>
+                            <%} else { %>
+                                <li><a href="/">Home</a></li>
+                                <% } %>
+                                    <% if (shop) { %>
+                                        <li class="active"><a href="/shop">Shop</a></li>
+                                        <%} else { %>
+                                            <li><a href="/shop">Shop</a></li>
+                                            <% } %>
+                                                <% if (category) { %>
+                                                    <li class="active"><a href="#">Category</a>
+                                                        <ul class="dropdown">
+                                                            <% categories.forEach(function(category){%>
+                                                                <li><a href="/shop/<%=category.cat_name%>">
+                                                                        <%=category.cat_name%>
+                                                                    </a></li>
+                                                                <% }) %>
+                                                        </ul>
+                                                    </li>
+                                                    <%} else { %>
+                                                        <li><a href="#">Category</a>
+                                                            <ul class="dropdown">
+                                                                <% categories.forEach(function(category){%>
+                                                                    <li><a href="/shop/<%=category.cat_name%>">
+                                                                            <%=category.cat_name%>
+                                                                        </a></li>
+                                                                    <% }) %>
+                                                            </ul>
+                                                        </li>
+                                                        <% } %>
+                                                            <% if (brand) { %>
+                                                                <li class="active"><a href="#">Brands</a>
+                                                                    <ul class="dropdown">
+                                                                        <%
+                                                                            subCategories.forEach(function(subCategory){%>
+                                                                            <li><a
+                                                                                    href="/shop/<%=subCategory._id%>?brand=<%=subCategory._id%>">
+                                                                                    <%=subCategory.sub_name%>
+                                                                                </a></li>
+                                                                            <% }) %>
+                                                                    </ul>
+                                                                </li>
+                                                                <%} else { %>
+                                                                    <li><a href="#">Brands</a>
+                                                                        <ul class="dropdown">
+                                                                            <%
+                                                                                subCategories.forEach(function(subCategory){%>
+                                                                                <li><a
+                                                                                        href="/shop/<%=subCategory._id%>?brand=<%=subCategory._id%>">
+                                                                                        <%=subCategory.sub_name%>
+                                                                                    </a></li>
+                                                                                <% }) %>
+                                                                        </ul>
+                                                                    </li>
+                                                                    <% } %>
+                                                                        <li>
+                                                                            <% if (user) { %>
+                                                                                <a href="#">
+                                                                                    <%= user %>
+                                                                                </a>
+                                                                                <ul class="dropdown">
+                                                                                    <li><a href="/profile">Profile</a>
+                                                                                    </li>
+                                                                                    <li><a href="/logout">Logout</a>
+                                                                                    </li>
+                                                                                </ul>
+                                                                                <%} else { %>
+                                                                                    <a href="/login">Login</a>
+                                                                                    <% } %>
+                                                                        </li>
+                    </ul>
+                </nav>
+            </div>
+            <div class="col-lg-3 col-md-3">
+                <div class="header__nav__option">
+                    <a href="/shop"><img src="/images/icon/search.png" alt=""></a>
+                    <a href="/wishlist"><img src="/images/icon/heart.png" alt=""></a>
+                    <a href="/cart"><img width="30px" height="30px" src="/images/icon/cart-2.png" alt=""></a>
+                </div>
+            </div>
+        </div>
+        <div class="canvas__open"><i class="fa fa-bars"></i></div>
+    </div>
+</header>
