@@ -72,13 +72,13 @@
                                                         src="/images/icon/search.png" alt=""></a></li>
                                         </ul>
                                     </div>
-                                    <div class="product__item__text">
-                                        <h6 class="text-center">
+                                    <div class="product__item__text text-center">
+                                        <h6>
                                             <%=product.name%>
                                         </h6>
-                                        <a onclick="addtoCart('<%=product._id%>','<%=product.name%>','<%=product.price%>','<%=product.image[0]%>')"
-                                            href="" class="add-cart">+ Add To Cart</a>
-                                        <h5 class="text-center">₹<%=product.price%>
+                                        <a onclick="addtoCart('<%=product._id%>','<%=product.name%>','<%=product.price%>','<%=product.stock%>','<%=product.image[0]%>')"
+                                            href="" class="">+ Add To Cart</a>
+                                        <h5>₹<%=product.price%>
                                         </h5>
                                     </div>
                                 </div>

@@ -1,5 +1,7 @@
+// eslint-disable-next-line no-undef
 const userModel = require('../model/user-model')
 
+// eslint-disable-next-line no-undef
 module.exports = {
    userSession: async (req, res, next) => {
       let id = req.session.userId
@@ -13,6 +15,13 @@ module.exports = {
          }
       } else {
          next()
+      }
+   },
+   adminSession: async (req, res, next) => {
+      if (req.session.adminLogin) {
+        next()
+      } else {
+         res.redirect('/admin')
       }
    },
 }

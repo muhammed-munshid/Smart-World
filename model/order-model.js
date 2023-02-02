@@ -1,4 +1,6 @@
+/* eslint-disable no-undef */
 const mongoose = require('mongoose')
+// eslint-disable-next-line no-unused-vars
 const addressModel = require('./address-model')
 const Objectid = mongoose.Types.ObjectId
 
@@ -25,7 +27,10 @@ const orderSchema = new mongoose.Schema({
     paymentMethod: {
         type:String
     },
-    status: {
+    paymentStatus: {
+        type:String
+    },
+    orderStatus: {
         type:String
     },
     date: {

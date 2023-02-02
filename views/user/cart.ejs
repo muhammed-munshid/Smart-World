@@ -61,17 +61,21 @@
                                                         </td>
                                                         <td>
                                                             <div>
-                                                                <button
-                                                                    onclick="minusQantity('<%=cart.products%>','<%=cart.productPrice%>')"
-                                                                    type="button"
-                                                                    class="btn btn-light pro-qty-left">-</button>
-                                                                <span id="<%=cart.products%>quantity">
-                                                                    <%=cart.quantity%>
-                                                                </span>
-                                                                <button
-                                                                    onclick="plusQantity('<%=cart.products%>','<%=cart.productPrice%>')"
-                                                                    type="button"
-                                                                    class="btn btn-light pro-qty-right">+</button>
+                                                                <% if (cart.productStock <=0) { %>
+
+                                                                    <% } else { %>
+                                                                        <button
+                                                                            onclick="minusQantity('<%=cart.products%>','<%=cart.productPrice%>')"
+                                                                            type="button"
+                                                                            class="btn btn-light pro-qty-left">-</button>
+                                                                        <span id="<%=cart.products%>quantity">
+                                                                            <%=cart.quantity%>
+                                                                        </span>
+                                                                        <button
+                                                                            onclick="plusQantity('<%=cart.products%>','<%=cart.productPrice%>')"
+                                                                            type="button"
+                                                                            class="btn btn-light pro-qty-right">+</button>
+                                                                        <% } %>
                                                             </div>
 
                                                         </td>
@@ -145,22 +149,24 @@
                                     </div>
                                     <div class="row">
                                         <li class="cart_total">Discount</li>
-                                        <li class="cart_total_3"><%= carts.discount.amount %> </li>
+                                        <li class="cart_total_3">
+                                            <%= carts.discount.amount %>
+                                        </li>
                                     </div>
                                     <div class="row">
-                                        <% if (carts.discount.amount>0) { %> 
-                                        <li class="cart_total">Total</li>
-                                        <li class="cart_total_5">
-                                            <%=carts.grandTotal%>
-                                        </li>
-                                        <% } else { %> 
+                                        <% if (carts.discount.amount>0) { %>
                                             <li class="cart_total">Total</li>
-                                            <li class="cart_total_5" id="Totals">
-                                                <%=carts.total%>
+                                            <li class="cart_total_5">
+                                                <%=carts.grandTotal%>
                                             </li>
-                                            <% } %> 
+                                            <% } else { %>
+                                                <li class="cart_total">Total</li>
+                                                <li class="cart_total_5" id="Totals">
+                                                    <%=carts.total%>
+                                                </li>
+                                                <% } %>
                                     </div>
-                                    
+
                                 </ul>
                                 <a href="/checkout" class="primary-btn">Proceed to checkout</a>
                             </div>
@@ -169,158 +175,166 @@
                 </div>
             </section>
             <!-- Shopping Cart Section End -->
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-                <script>
-                    function plusQantity(cartId, Price) {
-                        $.ajax({
-                            url: "/plus-quantity/" + cartId,
-                            method: "get",
-                            success: (response) => {
-                                if (response.status) {
-                                    let quantity = document.getElementById(`${cartId}quantity`).innerHTML;
-                                    quantity = parseInt(quantity);
-                                    document.getElementById(`${cartId}quantity`).innerHTML = quantity + 1;
-                                    document.getElementById(`${cartId}total`).innerHTML = Price * (quantity + 1);
-                                    let totalBill = document.getElementById("Total").innerHTML;
-                                    let superBill = document.getElementById("Totals").innerHTML;
-                                    let total = parseInt(totalBill);
-                                    let price = parseInt(Price);
-                                    let Total = parseInt(superBill)
-                                    document.getElementById("Total").innerHTML = total + price;
-                                    document.getElementById("Totals").innerHTML = Total + price;
-                                } else if (response.error) {
-                                    console.log("error")
-                                }
-                            },
-                        });
-                    }
-                </script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+            <script>
+                function plusQantity(cartId, Price) {
+                    $.ajax({
+                        url: "/plus-quantity/" + cartId,
+                        method: "get",
+                        success: (response) => {
+                            if (response.status) {
+                                let quantity = document.getElementById(`${cartId}quantity`).innerHTML;
+                                quantity = parseInt(quantity);
+                                document.getElementById(`${cartId}quantity`).innerHTML = quantity + 1;
+                                document.getElementById(`${cartId}total`).innerHTML = Price * (quantity + 1);
+                                let totalBill = document.getElementById("Total").innerHTML;
+                                let superBill = document.getElementById("Totals").innerHTML;
+                                let total = parseInt(totalBill);
+                                let price = parseInt(Price);
+                                let Total = parseInt(superBill)
+                                document.getElementById("Total").innerHTML = total + price;
+                                document.getElementById("Totals").innerHTML = Total + price;
+                            } else if (response.stocklimit) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "error",
+                                    title: "Sorry! Out of Stock",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true
+                                });
+                            } else if (response.error) {
+                                console.log("error")
+                            }
+                        },
+                    });
+                }
+            </script>
 
-                <script>
-                    function minusQantity(cartId, Price) {
-                        $.ajax({
-                            url: "/minus-quantity/" + cartId,
-                            method: "get",
-                            success: (response) => {
-                                if (response.status) {
-                                    let quantity = document.getElementById(`${cartId}quantity`).innerHTML;
-                                    if (quantity <= 1) {
-                                        deleteCart(cartId)
-                                    }
-                                    quantity = parseInt(quantity);
-                                    document.getElementById(`${cartId}quantity`).innerHTML = quantity - 1;
-                                    document.getElementById(`${cartId}total`).innerHTML =
-                                        Price * (quantity - 1);
-                                    let totalBill = document.getElementById("Total").innerHTML;
-                                    let superBill = document.getElementById("Totals").innerHTML;
-                                    let total = parseInt(totalBill);
-                                    let price = parseInt(Price);
-                                    let Total = parseInt(superBill)
-                                    document.getElementById("Total").innerHTML = total - price;
-                                    document.getElementById("Totals").innerHTML = Total - price;
-                                } else if (response.deleted) {
-                                    Swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: " Deleted!",
-                                        customClass: "swal-wide",
-                                        showConfirmButton: true
-                                    });
+            <script>
+                function minusQantity(cartId, Price) {
+                    $.ajax({
+                        url: "/minus-quantity/" + cartId,
+                        method: "get",
+                        success: (response) => {
+                            if (response.status) {
+                                let quantity = document.getElementById(`${cartId}quantity`).innerHTML;
+                                if (quantity <= 1) {
+                                    deleteCart(cartId)
                                 }
-                                $("#abc").load(" #abc");
-                            },
-                        });
-                    }
-                </script>
-                <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-                <script>
-                    function applyCoupon() {
-                        console.log('okkk');
-                        const couponCode = document.getElementById("code").value;
-                        console.log(couponCode);
-                        if (couponCode != "") {                            
-                        $.ajax({
-                        url: '/add-coupon/'+ couponCode,
-                        method: 'post',
-                        success: async (response) => {
-                            if (response.success) {
+                                quantity = parseInt(quantity);
+                                document.getElementById(`${cartId}quantity`).innerHTML = quantity - 1;
+                                document.getElementById(`${cartId}total`).innerHTML =
+                                    Price * (quantity - 1);
+                                let totalBill = document.getElementById("Total").innerHTML;
+                                let superBill = document.getElementById("Totals").innerHTML;
+                                let total = parseInt(totalBill);
+                                let price = parseInt(Price);
+                                let Total = parseInt(superBill)
+                                document.getElementById("Total").innerHTML = total - price;
+                                document.getElementById("Totals").innerHTML = Total - price;
+                            } else if (response.deleted) {
                                 Swal.fire({
                                     position: "center",
                                     icon: "success",
-                                    title: "Coupon Added",
+                                    title: " Deleted!",
                                     customClass: "swal-wide",
-                                    showConfirmButton: true,
+                                    showConfirmButton: true
                                 });
-                            } else if (response.exist) {
+                            }
+                            $("#abc").load(" #abc");
+                        },
+                    });
+                }
+            </script>
+            <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+            <script>
+                function applyCoupon() {
+                    console.log('okkk');
+                    const couponCode = document.getElementById("code").value;
+                    console.log(couponCode);
+                    if (couponCode != "") {
+                        $.ajax({
+                            url: '/add-coupon/' + couponCode,
+                            method: 'post',
+                            success: async (response) => {
+                                if (response.success) {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "success",
+                                        title: "Coupon Added",
+                                        customClass: "swal-wide",
+                                        showConfirmButton: true,
+                                    });
+                                } else if (response.exist) {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: "Your code is already exist",
+                                        customClass: "swal-wide",
+                                        showConfirmButton: true,
+                                    });
+                                } else if (response.error) {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: "Your code not available",
+                                        customClass: "swal-wide",
+                                        showConfirmButton: true,
+                                    });
+                                } else {
+                                    Swal.fire({
+                                        position: "center",
+                                        icon: "error",
+                                        title: "Something Error! Try Again",
+                                        customClass: "swal-wide",
+                                        showConfirmButton: true,
+                                    });
+                                }
+                            }
+                        })
+                    }
+                }
+            </script>
+            <script>
+                async function deleteCart(productId) {
+                    $.ajax({
+                        url: `/delete-cart/${productId}`,
+                        method: "get",
+                        success: (response) => {
+                            if (response.deleted) {
                                 Swal.fire({
                                     position: "center",
-                                    icon: "error",
-                                    title: "Your code is already exist",
+                                    icon: "success",
+                                    title: " Deleted!",
                                     customClass: "swal-wide",
-                                    showConfirmButton: true,
+                                    showConfirmButton: true
                                 });
-                            } else if (response.error) {
+                                $("#abc").load(" #abc");
+                            }
+                        }
+                    })
+                }
+            </script>
+            <script>
+                async function deleteallCart(cartId) {
+                    $.ajax({
+                        url: `/delete-all-cart/${cartId}`,
+                        method: "get",
+                        success: (response) => {
+                            if (response.deleted) {
                                 Swal.fire({
                                     position: "center",
-                                    icon: "error",
-                                    title: "Your code not available",
+                                    icon: "success",
+                                    title: "All Products are Deleted!",
                                     customClass: "swal-wide",
-                                    showConfirmButton: true,
-                                });
-                            } else {
-                                Swal.fire({
-                                    position: "center",
-                                    icon: "error",
-                                    title: "Something Error! Try Again",
-                                    customClass: "swal-wide",
-                                    showConfirmButton: true,
+                                    showConfirmButton: false
                                 });
                             }
                         }
                     })
                 }
-                }
-                </script>
-                <script>
-                    async function deleteCart(productId) {
-                        $.ajax({
-                            url: `/delete-cart/${productId}`,
-                            method: "get",
-                            success: (response) => {
-                                if (response.deleted) {
-                                    Swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: " Deleted!",
-                                        customClass: "swal-wide",
-                                        showConfirmButton: true
-                                    });
-                                    $("#abc").load(" #abc");
-                                }
-                            }
-                        })
-                    }
-                </script>
-                <script>
-                    async function deleteallCart(cartId) {
-                        $.ajax({
-                            url: `/delete-all-cart/${cartId}`,
-                            method: "get",
-                            success: (response) => {
-                                if (response.deleted) {
-                                    Swal.fire({
-                                        position: "center",
-                                        icon: "success",
-                                        title: "All Products are Deleted!",
-                                        customClass: "swal-wide",
-                                        showConfirmButton: false
-                                    });
-                                }
-                            }
-                        })
-                    }
-                </script>
+            </script>
             <%- include('../partials/user-footer')%>
     </body>
 

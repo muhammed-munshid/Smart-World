@@ -1,3 +1,5 @@
+/* eslint-disable no-undef */
+/* eslint-disable no-unused-vars */
 const mongoose = require('mongoose')
 const subCategoryModel = require('./sub-category-model')
 const objectId = mongoose.Types.ObjectId
@@ -22,6 +24,9 @@ const productSchema = new mongoose.Schema({
     price: {
         type:Number,
         required:true
+    },
+    stock: {
+        type:Number
     },
     image: {
         type:Array

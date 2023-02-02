@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const mongoose = require('mongoose')
 const Objectid = mongoose.Types.ObjectId
 const couponSchema = new mongoose.Schema({

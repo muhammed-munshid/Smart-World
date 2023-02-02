@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 const multer = require("multer");
 const sharp = require("sharp");
 const multerStorage = multer.memoryStorage();

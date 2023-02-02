@@ -70,6 +70,7 @@
                                     <th>Amount</th>
                                     <th>Payment</th>
                                     <th>Status</th>
+                                    <th>Details</th>
                                     <th></th>
                                 </tr>
                             </thead>
@@ -97,10 +98,14 @@
                                                 <%= order.paymentMethod %>
                                             </td>
                                             <td>
-                                                <%= order.status %>
+                                                <%= order.orderStatus %>
                                             </td>
                                             <td>
-                                                <button type="submit" class="btn btn-success" href="">View</button></td>
+                                                <button type="submit" class="btn btn-success" href="">View</button>
+                                            </td>
+                                            <td>
+                                                <a class="btn btn-danger" href="/cancel-order/<%= order._id %>">Cancel</a>
+                                            </td>
                                         </tr>
                                     </form>
                                         <% } else if (order.paymentMethod=='online' ) { %>
@@ -125,10 +130,14 @@
                                                     <%= order.paymentMethod %>
                                                 </td>
                                                 <td>
-                                                    <%= order.status %>
+                                                    <%= order.orderStatus %>
                                                 </td>
                                                 <td>
-                                                    <button type="submit" class="btn btn-success" href="">View</button></td>
+                                                    <button type="submit" class="btn btn-success" href="">View</button>
+                                                </td>
+                                                <td>
+                                                    <a class="btn btn-danger" href="/cancel-order/<%= order._id %>">Cancel</a>
+                                                </td>
                                             </tr>
                                         </form>
                                             <% } %>

@@ -77,7 +77,7 @@
 
 <script>
 
-    async function addtoCart(productId, productName, productPrice, productImage) {
+    async function addtoCart(productId, productName, productPrice, productStock,productImage) {
         // window.alert("one")
         $.ajax({
             url: `/addtoCart/${productId}`,
@@ -86,6 +86,7 @@
                 image: productImage,
                 name: productName,
                 price: productPrice,
+                stock: productStock
             },
             method: "post",
             success: (response) => {
@@ -97,7 +98,6 @@
                         customClass: "swal-wide",
                         showConfirmButton: true
                     });
-
                 }
                 else if (response.loginErr) {
                     Swal.fire({
@@ -110,13 +110,21 @@
 
                 } else if (response.exist) {
                     Swal.fire({
-                        position: "right-end",
+                        position: "center",
                         icon: "success",
                         title: " already exist",
                         customClass: "swal-wide",
                         showConfirmButton: true
                     });
 
+                } else if (response.noAvailability) {
+                    Swal.fire({
+                        position: "center",
+                        icon: "error",
+                        title: "Out of Stock",
+                        customClass: "swal-wide",
+                        showConfirmButton: true
+                    });
                 }
             }
         })
@@ -125,7 +133,7 @@
 
 <script>
 
-    async function addtoWishlist(productId, productName, productImage, productPrice, productCategory) {
+    async function addtoWishlist(productId, productName, productImage, productPrice,productStock, productCategory) {
         $.ajax({
             url: `/addtoWishlist/${productId}`,
             data: {
@@ -133,12 +141,12 @@
                 name: productName,
                 image: productImage,
                 price: productPrice,
+                stock:productStock,
                 category: productCategory,
             },
             method: "post",
             success: (response) => {
                 if (response.added) {
-                    console.log("hfghgjhfgjgf");
                     Swal.fire({
                         position: "center",
                         icon: "success",

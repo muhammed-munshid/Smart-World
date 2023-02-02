@@ -11,7 +11,7 @@
             <div class="d-flex align-items-end row">
               <div class="col-sm-7">
                 <div class="card-body">
-                  <h5 class="card-title text-primary">Congratulations John! 🎉</h5>
+                  <h5 class="card-title text-primary">Congratulations Munshid! 🎉</h5>
                   <p class="mb-4">
                     You have done <span class="fw-bold">72%</span> more sales today. Check your new badge in
                     your profile.
@@ -40,9 +40,9 @@
                       <img src="../assets/img/icons/unicons/chart-success.png" alt="chart success" class="rounded" />
                     </div>
                   </div>
-                  <span class="fw-semibold d-block mb-1">Orders</span>
+                  <span class="fw-semibold d-block mb-1">Live Orders</span>
                   <h3 class="card-title mb-2">
-                    <%= count %>
+                    <%= liveOrders %>
                   </h3>
                 </div>
               </div>
@@ -56,7 +56,7 @@
                     </div>
                   </div>
                   <span>Sales</span>
-                  <h3 class="card-title text-nowrap mb-1">₹4,679</h3>
+                  <h3 class="card-title text-nowrap mb-1">₹<%= totalSales %> </h3>
                 </div>
               </div>
             </div>
@@ -73,9 +73,9 @@
                       <thead>
                         <tr>
                           <th>Date</th>
-                          <th>No.Products</th>
                           <th>Total</th>
                           <th>Payment</th>
+                          <th>Status</th>
                           <th>Details</th>
                         </tr>
                       </thead>
@@ -85,12 +85,20 @@
                             <td>
                               <%=order.date%>
                             </td>
-                            <td class="text-center">1</td>
+                            <% if (order.grandTotal == null) { %> 
                             <td>
                               <%=order.total%>
                             </td>
+                            <% } else { %> 
+                              <td>
+                                <%=order.grandTotal%>
+                              </td>
+                              <% } %> 
                             <td>
                               <%=order.paymentMethod%>
+                            </td>
+                            <td>
+                              <%=order.orderStatus%>
                             </td>
                             <td>
                               <button type="button" class="px-3 py-1 btn btn-secondary">
@@ -120,8 +128,8 @@
                       <img src="../assets/img/icons/unicons/paypal.png" alt="Credit Card" class="rounded" />
                     </div>
                   </div>
-                  <span class="d-block mb-1">Payment Paid</span>
-                  <h3 class="card-title text-nowrap mb-2">₹2,456</h3>
+                  <span class="d-block mb-1">Payments</span>
+                  <h3 class="card-title text-nowrap mb-2">₹<%= onlinePayments %> </h3>
                 </div>
               </div>
             </div>

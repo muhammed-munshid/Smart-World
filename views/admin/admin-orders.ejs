@@ -14,11 +14,10 @@
                     <tr>
                       <th>Order ID</th>
                       <th>User Name</th>
-                      <th>Place</th>
                       <th>Mobile</th>
                       <th>Amount</th>
+                      <th>Order Status</th>
                       <th>Details</th>
-                      <th>Status</th>
                     </tr>
                   </thead>
                   <tbody class="table-border-bottom-0">
@@ -33,31 +32,33 @@
                           <%=order.address.First_Name%>
                           <%=order.address.Last_Name%>
                         </td>
-                        <td><%=order.address.Town%></td>
                         <td>
                           <%=order.address.Mobile%>
                         </td>
                         <td>
                           <%=order.total%>
                         </td>
+                        <% if (order.orderStatus=='Cancelled') { %>
+                          <td style="font-size: 1rem;" class="text-danger font-weight-bold"><%=order.orderStatus%></td>
+                       <%} else if(order.orderStatus=='Delivered') { %>
+                        <td style="font-size: 1rem;" class="text-success font-weight-bold pr-1"><%=order.orderStatus%></td>
+                        <% }else{ %>
+                        <td>
+                          <select id="OStatus<%=order._id%>" style="width: 7.5rem;" onchange="statusOrder('<%=order._id%>')"
+                            class=" custom-select font-weight-bold bg-transparent text-info border-0 "
+                            name="orderStatus">
+          
+                            <option value="<%= order.orderStatus %>"><%= order.orderStatus %> </option>
+                            <option class="text-dark font-weight-bold" value="Packed">Packed</option>
+                            <option class="text-dark font-weight-bold" value="Shippped">Shippped</option>
+                            <option class="text-dark font-weight-bold" value="Delivered">Delivered</option>
+                          </select>
+                        </td>
+                        <% } %> 
                         <td>
                           <button type="button" class="px-3 py-1 btn btn-info">
                             <a href="/admin/view-order/<%=order._id%>" class="text-white">View</a>
                           </button>
-                        </td>
-                        <td>
-                          <select id="OStatus" style="width: 7.5rem;" onchange="statusOrder('<%=order._id%>')"
-                            class=" custom-select font-weight-bold bg-transparent text-info border-0 "
-                            name="orderStatus">
-          
-                            <option value="<%= order.status %>">
-                                <%= order.status %>
-                            </option>
-                            <option class="text-dark font-weight-bold" value="Placed">Placed</option>
-                            <option class="text-dark font-weight-bold" value="Processed">Processed</option>
-                            <option class="text-dark font-weight-bold" value="Shipped">Shipped</option>
-                            <option class="text-dark font-weight-bold" value="Delivered">Delivered</option>
-                          </select>
                         </td>
                       </tr>
                       <% }) %>
@@ -69,3 +70,32 @@
           </div>
           <div class="content-backdrop fade"></div>
         </div>
+
+        <script>
+          function statusOrder(orderId) {
+            const status = $(`#OStatus${orderId}`).val()
+            console.log(orderId, status,'hiii');
+            console.log(status,'status');
+            $.ajax({
+              url: '/admin/status-change',
+              data: {
+                orderId,
+                status
+              },
+              method: 'post',
+              success: ((response) => {
+                Swal.fire({
+                  position: 'center',
+                  icon: 'success',
+                  title: 'Order Changed',
+                  customClass: 'swal-wide',
+                  showConfirmButton: false,
+                  timer: 1000
+                }).then(()=>{
+                  location.reload()
+                })
+                
+              })
+            })
+          }
+        </script>

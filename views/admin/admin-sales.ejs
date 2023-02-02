@@ -5,6 +5,13 @@
       <div class="col-lg-11 col-sm-12 mb-3">
 
         <div class="mt-5" style="overflow-x:auto;">
+      <form id="dateFilterForm" class="float-end form-horizontal" action="/admin/search-date" method="post">
+          <label for="fromDate" class="">From</label>
+          <input  id="fromDate" type="date" name="fromDate" value="<%=fromDate%>" class="">
+          <label for="toDate" class="">To</label>
+          <input type="date" name="toDate" id="toDate" value="<%=toDateRef%>"  class="me-2 ">
+          <button type="submit" class="btn btn-primary text-center p-1" >apply</button>
+      </form>
           <table id="example" class="display nowrap table-bordered text-center" style="width:100%">
             <thead>
 
@@ -35,7 +42,7 @@
                     <%=x.address.Mobile%>
                   </td>
                   <td>
-                    <%=x.status%>
+                    <%=x.orderStatus%>
                   </td>
 
                   <td>

@@ -100,7 +100,7 @@
                             }
                         </script>
                     </div>
-                    <div class="col-lg-4 col-md-6">
+                    <div class="col-lg-4 col-md-6 col-6">
                         <div class="product__details__text">
                             <h4><%=product.name%></h4>
                             <div class="rating">
@@ -108,10 +108,10 @@
                             <h3>₹<%=product.price%></h3>
                             <p><%=product.description%></p>
                             <div class="product__details__cart__option">
-                                <a onclick="addtoCart('<%=product._id%>','<%=product.name%>','<%=product.price%>')" href="" class="primary-btn">add to cart</a>
+                                <a onclick="addtoCart('<%=product._id%>','<%=product.name%>','<%=product.price%>','<%=product.image[0]%>')" href="" class="primary-btn">add to cart</a>
                             </div>
                             <div class="product__details__btns__option">
-                                <a onclick="addtoWishlist('<%=product._id%>','<%=product.name%>','<%=product.price%>','<%=product.category%>')" href="">add to wishlist <i class="fa fa-heart"></i></a>
+                                <a onclick="addtoWishlist('<%=product._id%>','<%=product.name%>','<%=product.price%>','<%=product.category%>','<%=product.image[0]%>')" href="">add to wishlist <i class="fa fa-heart"></i></a>
                             </div>
                         </div>
                     </div>
