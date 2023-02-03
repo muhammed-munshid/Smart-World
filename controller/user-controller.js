@@ -146,7 +146,7 @@ module.exports = {
                 res.json({ noAvailability: true });
             } else {
                 if (req.session.userId) {
-                    const cart = await cartModel.findOne({ userId })
+                    const cart = await cartModel.findOne({ user_id: userId })
                     if (cart) {
                         const proExist = cart.items
                         proExist.forEach((element) => {
@@ -158,7 +158,7 @@ module.exports = {
                         if (exist) {
                             res.json({ exist: true })
                         } else {
-                            await cartModel.findOneAndUpdate({ userId: userId }, {
+                            await cartModel.findOneAndUpdate({ user_id: userId }, {
                                 $push: {
                                     items:
                                         [{
@@ -365,7 +365,7 @@ module.exports = {
             let userId = req.session.userId
             let exist = false
             if (req.session.userId) {
-                const wishlist = await wishlistModel.findOne({ userId })
+                const wishlist = await wishlistModel.findOne({ user_id: userId })
                 if (wishlist) {
                     const proExist = wishlist.items
                     proExist.forEach((element) => {
@@ -424,7 +424,7 @@ module.exports = {
             let userId = req.session.userId
             let exist = false
             if (req.session.userId) {
-                const cart = await cartModel.findOne({ userId })
+                const cart = await cartModel.findOne({ user_id: userId })
                 if (cart) {
                     const proExist = cart.items
                     proExist.forEach((element) => {
@@ -449,7 +449,7 @@ module.exports = {
                             }
                         }
                         )
-                        await cartModel.updateOne({ userId: userId }, { $inc: { total: products.price } })
+                        await cartModel.updateOne({ user_id: userId }, { $inc: { total: products.price } })
                         res.json({ added: true })
                     }
                 }

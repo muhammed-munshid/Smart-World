@@ -83,7 +83,7 @@
                         <% Orders.forEach(function(order){%>
                           <tr>
                             <td>
-                              <%=order.date%>
+                              <%=order.date.toLocaleDateString()%>
                             </td>
                             <% if (order.grandTotal == null) { %> 
                             <td>

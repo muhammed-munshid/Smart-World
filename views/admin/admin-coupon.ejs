@@ -48,10 +48,10 @@
                           <%=coupon.max_discount%>
                         </td>
                         <td>
-                          <%=coupon.create_date%>
+                          <%=coupon.create_date.toLocaleDateString()%>
                         </td>
                         <td>
-                          <%=coupon.expiry_date%>
+                          <%=coupon.expiry_date.toLocaleDateString()%>
                         </td>
                         <td><a href="/admin/edit-coupon/<%=coupon._id%>" class="btn btn-info">Edit</a></td>
                         <% if(coupon.is_deleted){%>
