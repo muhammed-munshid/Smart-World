@@ -743,9 +743,6 @@ module.exports = {
             let carts = await cartModel.findOne({ user_id: userId })
             let orders = req.body
             let products = carts.items
-            console.log(products)
-            let stock = await productModel.find({ _id: products.products })
-            console.log('stock:' + stock);
             let paymentStatus = orders['payment-method'] === 'COD' ? 'Pending' : 'Paid'
             let orderStatus = orders['payment-method'] === 'COD' ? 'Processing' : 'Pending'
             const newOrder = new orderModel({
@@ -807,54 +804,68 @@ module.exports = {
                         }
                     } else if (req.body['payment-method'] == 'wallet') {
                         let user = await userModel.findOne({ _id: userId })
-                        let order = await orderModel.findOne({user_id:userId})
+                        let order = await orderModel.findOne({ user_id: userId })
                         let carts = await cartModel.findOne({ user_id: userId })
-                        let products = carts.items
                         let orderId = order._id
                         let total = carts.total
-                        console.log('orderId'+orderId);
-                        console.log('total:'+total);
+                        let grandTotal = carts.grandTotal
+                        console.log('granftdotal:' + grandTotal);
                         let walletAmount = user.walletAmount
-                        console.log('walletAmount:'+walletAmount);
                         if (walletAmount == 0) {
                             res.json({ zeroWallet: true })
                         } else {
-                            await cartModel.deleteOne({ user_id: userId })
-                            if (walletAmount < total) {
-                                const balancePayment = total - walletAmount; 
-                                console.log('balancePayment:'+balancePayment);
-                              const newOrder = new orderModel({
-                                  date: new Date(),
-                                  time: new Date().toLocaleTimeString(),
-                                  user_id: userId,
-                                  products: products,
-                                  total: carts.total,
-                                  grandTotal: carts.grandTotal,
-                                  address: orders.address,
-                                  paymentMethod: "Wallet",
-                                  paymentStatus: "Pending",
-                                  orderStatus: "Pending"
-                                });
-                                newOrder.save()
-                                .then((result) => {
-                                  let userOrderData = result;
-                                  req.session.orderId = result._id;
-                                  orderId = result._id.toString();
-                                  let options = {
-                                    amount: balancePayment * 100,
-                                    currency: "INR",
-                                    receipt: orderId
+                            if (grandTotal == null) {
+                                await cartModel.deleteOne({ user_id: userId })
+                                if (walletAmount < total) {
+                                    const balancePayment = total - walletAmount
+                                    orderId = newOrder._id.valueOf()
+                                    let options = {
+                                        amount: balancePayment * 100,
+                                        currency: "INR",
+                                        receipt: orderId
+                                    }
+                                    instance.orders.create(options, (err, order) => {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        res.json({ order, user })
+                                    })
+                                } else {
+                                    const balanceWallet = walletAmount - total
+                                    await userModel.findOneAndUpdate({ _id: userId }, {
+                                        $set: {
+                                            walletAmount: balanceWallet
+                                        }
+                                    }).then(() => {
+                                        res.json({ status: true })
+                                    })
                                 }
-                                instance.orders.create(options, (err, order) => {
-                                    if (err) {
-                                        console.log(err);
-                                    }
-                                    res.json({ order, user })
-                                })
-                                    }
-                                  );
                             } else {
-                                console.log('errror');
+                                await cartModel.deleteOne({ user_id: userId })
+                                if (walletAmount < grandTotal) {
+                                    const balancePayment = grandTotal - walletAmount
+                                    orderId = newOrder._id.valueOf()
+                                    let options = {
+                                        amount: balancePayment * 100,
+                                        currency: "INR",
+                                        receipt: orderId
+                                    }
+                                    instance.orders.create(options, (err, order) => {
+                                        if (err) {
+                                            console.log(err);
+                                        }
+                                        res.json({ order, user })
+                                    })
+                                } else {
+                                    const balanceWallet = walletAmount - grandTotal
+                                    await userModel.findOneAndUpdate({ _id: userId }, {
+                                        $set: {
+                                            walletAmount: balanceWallet
+                                        }
+                                    }).then(() => {
+                                        res.json({ status: true })
+                                    })
+                                }
                             }
                         }
                     } else {
@@ -914,7 +925,7 @@ module.exports = {
             let hmac = crypto.createHmac('sha256', 'BlR899sYazh9UinmUx2UeDb5')
             hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id)
             hmac = hmac.digest('hex')
-            let walletAmount = await userModel.findOne({_id:userId})
+            let walletAmount = await userModel.findOne({ _id: userId })
             if (walletAmount == null) {
                 if (hmac == details.payment.razorpay_signature) {
                     await orderModel.updateOne({ _id: orderId }, {
@@ -937,17 +948,17 @@ module.exports = {
                             orderPayment: 'Paid'
                         }
                     })
-                    await userModel.updateOne({_id:userId},{
+                    await userModel.updateOne({ _id: userId }, {
                         $set: {
-                            walletAmount:0
+                            walletAmount: 0
                         }
                     })
-                    .then(() => {
-                        res.json({ status: true })
-                    }).catch((err) => {
-                        console.log(err);
-                        res.json({ status: false, errMsg: '' })
-                    })
+                        .then(() => {
+                            res.json({ status: true })
+                        }).catch((err) => {
+                            console.log(err);
+                            res.json({ status: false, errMsg: '' })
+                        })
                 }
             }
         } catch (error) {
@@ -1010,41 +1021,42 @@ module.exports = {
 
     returnOrder: async (req, res) => {
         try {
-        const orderId = req.params.id;
-        const userId = req.session.userId
-        let orders = await orderModel.findOne({ _id: orderId })
-        console.log(orders);
-        let totalAmount = orders.total
-        let grandAmount = orders.grandTotal
-        console.log('total:' + totalAmount);
-        console.log('grand:' + grandAmount);
-        await orderModel.findByIdAndUpdate(
-            { _id: orderId },
-            {
-                $set:
+            const orderId = req.params.id;
+            const userId = req.session.userId
+            let orders = await orderModel.findOne({ _id: orderId })
+            let userWallet = await userModel.findOne({ _id: userId })
+            let walletAmount = userWallet.walletAmount
+            let totalAmount = orders.total
+            let grandAmount = orders.grandTotal
+            let totalWallet = totalAmount + walletAmount
+            let grandWallet = grandAmount + walletAmount
+            await orderModel.findByIdAndUpdate(
+                { _id: orderId },
                 {
-                    orderStatus: "returned",
-                    paymentStatus: "refund success"
+                    $set:
+                    {
+                        orderStatus: "returned",
+                        paymentStatus: "refund success"
+                    }
                 }
+            )
+            if (grandAmount == null) {
+                await userModel.findOneAndUpdate({ _id: userId }, {
+                    $set: {
+                        walletAmount: totalWallet
+                    }
+                }).then(() => {
+                    res.json({ return: true })
+                })
+            } else {
+                await userModel.findOneAndUpdate({ _id: userId }, {
+                    $set: {
+                        walletAmount: grandWallet
+                    }
+                }).then(() => {
+                    res.json({ return: true })
+                })
             }
-        )
-        if (grandAmount == null) {
-            await userModel.findOneAndUpdate({ _id: userId }, {
-                $set: {
-                    walletAmount: totalAmount
-                }
-            }).then(() => {
-                res.json({ return: true })
-            })
-        } else {
-            await userModel.findOneAndUpdate({ _id: userId }, {
-                $set: {
-                    walletAmount: grandAmount
-                }
-            }).then(() => {
-                res.json({ return: true })
-            })
-        }
         } catch (error) {
             res.render('user/404-page')
         }
