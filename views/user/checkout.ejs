@@ -27,6 +27,27 @@
             </section>
             <!-- Breadcrumb Section End -->
 
+            <% if (carts.total == 0) { %>
+                <div class="wrapper">
+                    <div class="container-new">
+                        <div class="">
+                            <div class="text-center">
+                                <iconify-icon class="smile"
+                                    icon="ph:smiley-sad-light"></iconify-icon>
+                                <h2 class="typing px-spc-b-20">Sorry, your cart products is not
+                                    available</h2>
+                                <span class="span px-spc-b-20">If you want to back, Please click
+                                    link below</span>
+                                <a href="/cart" class="go-home"><i
+                                        class="fa fa-shopping-cart go-home-icon"
+                                        aria-hidden="true"></i>Go Back</a>
+                            </div>
+                            <div class="">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <% } else { %>  
             <!-- Checkout Section Begin -->
             <section class="checkout spad">
                 <div class="container">
@@ -163,14 +184,18 @@
                                             <label for="payment">
                                                 <input type="radio" name="payment-method" value="online" id="payment">
                                                 Online payment
-                                                <!-- <span class="checkmark"></span> -->
                                             </label>
                                         </div>
                                         <div class="">
                                             <label for="paypal">
                                                 <input type="radio" name="payment-method" value="COD" id="cash">
                                                 Cash on delivery
-                                                <!-- <span class="checkmark"></span> -->
+                                            </label>
+                                        </div>
+                                        <div class="">
+                                            <label for="paypal">
+                                                <input type="radio" name="payment-method" value="wallet" id="wallet">
+                                                Wallet
                                             </label>
                                         </div>
                                         <button type="submit" class="site-btn">PLACE
@@ -182,6 +207,7 @@
                     </div>
                 </div>
             </section>
+            <% } %> 
             <!-- Checkout Section End -->
 
             <!-- Js Plugins -->
@@ -203,12 +229,29 @@
                                     showConfirmButton: false,
                                 });
                                 window.location.href = '/order-success'
+                            } else if(response.noSelect){
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "error",
+                                    title: "You are not selecting option",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: false,
+                                });
+                                window.location.href = '/checkout'
+                            } else if (response.zeroWallet) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "error",
+                                    title: "No balance in your wallet",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true,
+                                });
                             } else {
                                 if (response.order == null) {
                                     Swal.fire({
                                         icon: 'error',
-                                        title: 'Connection Failed',
-                                        text: 'Please Check the Internet Connection!',
+                                        title: 'Something Wrong',
+                                        text: 'Please Try Again!',
                                         customClass: 'swal-wide',
                                     })
                                 } else {
@@ -266,35 +309,14 @@
                                 });
                                 window.location.href = '/order-success'
                             } else {
-                                alert('payment failed')
                                 Swal.fire({
                                     position: "center",
-                                    icon: "success",
+                                    icon: "error",
                                     title: "Your payment failed",
                                     customClass: "swal-wide",
                                     showConfirmButton: false,
                                 });
                                 window.location.href = '/order-failed'
-                            }
-                        }
-                    })
-                }
-            </script>
-            <script>
-                async function discountCode(couponId) {
-                    alert('ok')
-                    $.ajax({
-                        url: `/coupon-code/${couponId}`,
-                        method: "get",
-                        success: (response) => {
-                            if (response.deleted) {
-                                Swal.fire({
-                                    position: "center",
-                                    icon: "success",
-                                    title: "All Products are Deleted!",
-                                    customClass: "swal-wide",
-                                    showConfirmButton: false
-                                });
                             }
                         }
                     })

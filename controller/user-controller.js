@@ -279,6 +279,70 @@ module.exports = {
         try {
             let productId = req.params.id
             let userId = req.session.userId
+            const cartData = await cartModel.findOne({ user_id: userId });
+            let productIndex = cartData.items.findIndex(
+                (p) => p.products == productId
+            );
+            let prodId = cartData.items[productIndex]
+            let price = prodId.productPrice
+            let total = cartData.total
+            let grandTotal = cartData.grandTotal
+            const deleteTotal = total - price
+            const deleteGrand = grandTotal - price
+            if (deleteGrand == null) {
+                await cartModel.findOneAndUpdate({ user_id: userId }, {
+                    $pull: {
+                        items:
+                        {
+                            products: productId
+                        }
+                    }
+                })
+                await cartModel.updateOne({ user_id: userId }, {
+                    $set: {
+                        total: deleteTotal
+                    }
+                })
+                    .then(() => {
+                        res.json({ deleted: true })
+                    })
+            } else {
+                await cartModel.findOneAndUpdate({ user_id: userId }, {
+                    $set: {
+                        total: deleteTotal,
+                        grandTotal: deleteGrand,
+                        discount: 0
+                    },
+                    $pull: {
+                        items:
+                        {
+                            products: productId
+                        }
+                    }
+                })
+                    .then(() => {
+                        res.json({ deleted: true })
+                    })
+            }
+        } catch (error) {
+            res.render('user/404-page')
+        }
+    },
+
+    deleteminusCart: async (req, res) => {
+        try {
+            let productId = req.params.id
+            let userId = req.session.userId
+            const cartData = await cartModel.findOne({ user_id: userId });
+            let productIndex = cartData.items.findIndex(
+                (p) => p.products == productId
+            );
+            let prodId = cartData.items[productIndex]
+            let price = prodId.productPrice
+            let total = cartData.total
+            const deleteTotal = total - price
+            console.log(price);
+            console.log(deleteTotal);
             await cartModel.findOneAndUpdate({ user_id: userId }, {
                 $pull: {
                     items:
@@ -321,7 +385,6 @@ module.exports = {
                     let cart = await cartModel.findOne({ user_id: userId })
                     let amount = ((cart.total / 100) * coupon.discount).toFixed(0)
                     let grandTotal = cart.total - amount
-                    console.log(grandTotal);
                     let newCoupon = await cartModel.findOneAndUpdate({ userId }, { $set: { discount: { couponId: coupon._id, amount }, grandTotal } })
                     console.log(newCoupon);
                     res.json({ success: true })
@@ -680,8 +743,9 @@ module.exports = {
             let carts = await cartModel.findOne({ user_id: userId })
             let orders = req.body
             let products = carts.items
-            console.log(products);
-            // await productModel.findOne({})
+            console.log(products)
+            let stock = await productModel.find({ _id: products.products })
+            console.log('stock:' + stock);
             let paymentStatus = orders['payment-method'] === 'COD' ? 'Pending' : 'Paid'
             let orderStatus = orders['payment-method'] === 'COD' ? 'Processing' : 'Pending'
             const newOrder = new orderModel({
@@ -694,7 +758,8 @@ module.exports = {
                 total: carts.total,
                 paymentStatus: paymentStatus,
                 orderStatus: orderStatus,
-                date: new Date()
+                date: new Date(),
+                time: new Date().toLocaleTimeString()
             })
             newOrder.save()
                 // eslint-disable-next-line no-unused-vars
@@ -704,15 +769,15 @@ module.exports = {
                             { _id: el.products },
                             { $inc: { stock: -el.quantity } }
                         );
-
                     });
-                    await cartModel.deleteOne({ user_id: userId })
                     if (req.body['payment-method'] == 'COD') {
+                        await cartModel.deleteOne({ user_id: userId })
                         res.json({ status: true })
-                    } else {
+                    } else if (req.body['payment-method'] == 'online') {
                         let orderId = newOrder._id.valueOf()
                         let userId = req.session.userId
                         let user = await userModel.findOne({ _id: userId })
+                        await cartModel.deleteOne({ user_id: userId })
                         let totalPrice = newOrder.total
                         let grandTotal = newOrder.grandTotal
                         if (grandTotal == null) {
@@ -740,9 +805,64 @@ module.exports = {
                                 res.json({ order, user })
                             })
                         }
+                    } else if (req.body['payment-method'] == 'wallet') {
+                        let user = await userModel.findOne({ _id: userId })
+                        let order = await orderModel.findOne({user_id:userId})
+                        let carts = await cartModel.findOne({ user_id: userId })
+                        let products = carts.items
+                        let orderId = order._id
+                        let total = carts.total
+                        console.log('orderId'+orderId);
+                        console.log('total:'+total);
+                        let walletAmount = user.walletAmount
+                        console.log('walletAmount:'+walletAmount);
+                        if (walletAmount == 0) {
+                            res.json({ zeroWallet: true })
+                        } else {
+                            await cartModel.deleteOne({ user_id: userId })
+                            if (walletAmount < total) {
+                                const balancePayment = total - walletAmount; 
+                                console.log('balancePayment:'+balancePayment);
+                              const newOrder = new orderModel({
+                                  date: new Date(),
+                                  time: new Date().toLocaleTimeString(),
+                                  user_id: userId,
+                                  products: products,
+                                  total: carts.total,
+                                  grandTotal: carts.grandTotal,
+                                  address: orders.address,
+                                  paymentMethod: "Wallet",
+                                  paymentStatus: "Pending",
+                                  orderStatus: "Pending"
+                                });
+                                newOrder.save()
+                                .then((result) => {
+                                  let userOrderData = result;
+                                  req.session.orderId = result._id;
+                                  orderId = result._id.toString();
+                                  let options = {
+                                    amount: balancePayment * 100,
+                                    currency: "INR",
+                                    receipt: orderId
+                                }
+                                instance.orders.create(options, (err, order) => {
+                                    if (err) {
+                                        console.log(err);
+                                    }
+                                    res.json({ order, user })
+                                })
+                                    }
+                                  );
+                            } else {
+                                console.log('errror');
+                            }
+                        }
+                    } else {
+                        res.json({ noSelect: true })
                     }
                 })
-        } catch (error) {
+        }
+        catch (error) {
             res.render('user/404-page')
         }
     },
@@ -786,6 +906,7 @@ module.exports = {
     // VERIFY PAYMENT
     verifyPayment: async (req, res) => {
         try {
+            let userId = req.session.userId
             let details = req.body
             let orderId = req.body.order.order.receipt
             // eslint-disable-next-line no-undef
@@ -793,18 +914,41 @@ module.exports = {
             let hmac = crypto.createHmac('sha256', 'BlR899sYazh9UinmUx2UeDb5')
             hmac.update(details.payment.razorpay_order_id + '|' + details.payment.razorpay_payment_id)
             hmac = hmac.digest('hex')
-            if (hmac == details.payment.razorpay_signature) {
-                await orderModel.updateOne({ _id: orderId }, {
-                    $set: {
-                        orderStatus: 'Processing',
-                        orderPayment: 'Paid'
-                    }
-                }).then(() => {
-                    res.json({ status: true })
-                }).catch((err) => {
-                    console.log(err);
-                    res.json({ status: false, errMsg: '' })
-                })
+            let walletAmount = await userModel.findOne({_id:userId})
+            if (walletAmount == null) {
+                if (hmac == details.payment.razorpay_signature) {
+                    await orderModel.updateOne({ _id: orderId }, {
+                        $set: {
+                            orderStatus: 'Processing',
+                            orderPayment: 'Paid'
+                        }
+                    }).then(() => {
+                        res.json({ status: true })
+                    }).catch((err) => {
+                        console.log(err);
+                        res.json({ status: false, errMsg: '' })
+                    })
+                }
+            } else {
+                if (hmac == details.payment.razorpay_signature) {
+                    await orderModel.updateOne({ _id: orderId }, {
+                        $set: {
+                            orderStatus: 'Processing',
+                            orderPayment: 'Paid'
+                        }
+                    })
+                    await userModel.updateOne({_id:userId},{
+                        $set: {
+                            walletAmount:0
+                        }
+                    })
+                    .then(() => {
+                        res.json({ status: true })
+                    }).catch((err) => {
+                        console.log(err);
+                        res.json({ status: false, errMsg: '' })
+                    })
+                }
             }
         } catch (error) {
             res.render('user/404-page')
@@ -859,6 +1003,48 @@ module.exports = {
                 { $set: { orderStatus: "Cancelled" } }
             );
             res.redirect("/profile-orders");
+        } catch (error) {
+            res.render('user/404-page')
+        }
+    },
+
+    returnOrder: async (req, res) => {
+        try {
+        const orderId = req.params.id;
+        const userId = req.session.userId
+        let orders = await orderModel.findOne({ _id: orderId })
+        console.log(orders);
+        let totalAmount = orders.total
+        let grandAmount = orders.grandTotal
+        console.log('total:' + totalAmount);
+        console.log('grand:' + grandAmount);
+        await orderModel.findByIdAndUpdate(
+            { _id: orderId },
+            {
+                $set:
+                {
+                    orderStatus: "returned",
+                    paymentStatus: "refund success"
+                }
+            }
+        )
+        if (grandAmount == null) {
+            await userModel.findOneAndUpdate({ _id: userId }, {
+                $set: {
+                    walletAmount: totalAmount
+                }
+            }).then(() => {
+                res.json({ return: true })
+            })
+        } else {
+            await userModel.findOneAndUpdate({ _id: userId }, {
+                $set: {
+                    walletAmount: grandAmount
+                }
+            }).then(() => {
+                res.json({ return: true })
+            })
+        }
         } catch (error) {
             res.render('user/404-page')
         }

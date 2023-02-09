@@ -219,8 +219,8 @@
                             if (response.status) {
                                 let quantity = document.getElementById(`${cartId}quantity`).innerHTML;
                                 if (quantity <= 1) {
-                                    deleteCart(cartId)
-                                }
+                                    deleteminusCart(cartId)
+                                } else {
                                 quantity = parseInt(quantity);
                                 document.getElementById(`${cartId}quantity`).innerHTML = quantity - 1;
                                 document.getElementById(`${cartId}total`).innerHTML =
@@ -232,6 +232,7 @@
                                 let Total = parseInt(superBill)
                                 document.getElementById("Total").innerHTML = total - price;
                                 document.getElementById("Totals").innerHTML = Total - price;
+                                }
                             } else if (response.deleted) {
                                 Swal.fire({
                                     position: "center",
@@ -300,6 +301,33 @@
                 async function deleteCart(productId) {
                     $.ajax({
                         url: `/delete-cart/${productId}`,
+                        method: "get",
+                        success: (response) => {
+                            if (response.deleted) {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: " Deleted!",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true
+                                });
+                                $("#abc").load(" #abc");
+                                let totalBill = document.getElementById("Total").innerHTML;
+                                let superBill = document.getElementById("Totals").innerHTML;
+                                let price = document.getElementById(`${cartId}total`).innerHTML;
+                                let total = totalBill - price;
+                                let superTotal = superBill - price;
+                                document.getElementById("Total").innerHTML = total;
+                                document.getElementById("Totals").innerHTML = superTotal;
+                            }
+                        }
+                    })
+                }
+            </script>
+            <script>
+                async function deleteminusCart(productId) {
+                    $.ajax({
+                        url: `/delete-minuscart/${productId}`,
                         method: "get",
                         success: (response) => {
                             if (response.deleted) {

@@ -77,38 +77,6 @@
                             <tbody>
                                 <% orders.forEach(function(order){%>
                                     <% if (order.paymentMethod=='COD' ) { %>
-                                    <form action="/order-products/<%= order._id %>" method="post">
-                                        <tr>
-                                            <td>
-                                                <%= order.date.toLocaleDateString() %>
-                                            </td>
-                                            <td>
-                                                <%= order.address.Address %>
-                                            </td>
-                                            <td>
-                                                <%= order.address.Pincode %>
-                                            </td>
-                                            <td>
-                                                <%= order.address.Mobile %>
-                                            </td>
-                                            <td>
-                                                <%= order.total %>
-                                            </td>
-                                            <td>
-                                                <%= order.paymentMethod %>
-                                            </td>
-                                            <td>
-                                                <%= order.orderStatus %>
-                                            </td>
-                                            <td>
-                                                <button type="submit" class="btn btn-success" href="">View</button>
-                                            </td>
-                                            <td>
-                                                <a class="btn btn-danger" href="/cancel-order/<%= order._id %>">Cancel</a>
-                                            </td>
-                                        </tr>
-                                    </form>
-                                        <% } else if (order.paymentMethod=='online' ) { %>
                                         <form action="/order-products/<%= order._id %>" method="post">
                                             <tr>
                                                 <td>
@@ -118,7 +86,7 @@
                                                     <%= order.address.Address %>
                                                 </td>
                                                 <td>
-                                                    <%= order.address.Pincode  %>
+                                                    <%= order.address.Pincode %>
                                                 </td>
                                                 <td>
                                                     <%= order.address.Mobile %>
@@ -135,13 +103,106 @@
                                                 <td>
                                                     <button type="submit" class="btn btn-success" href="">View</button>
                                                 </td>
-                                                <td>
-                                                    <a class="btn btn-danger" href="/cancel-order/<%= order._id %>">Cancel</a>
-                                                </td>
+                                                <% if (order.orderStatus=='Cancelled' ) {%>
+                                                    <td>Cancelled</td>
+                                                    <% } else if (order.orderStatus=='Delivered' ) { %>
+                                                        <td>Delivered</td>
+                                                        <% } else if (order.orderStatus=='returned' ) { %>
+                                                            <td>Returned</td>
+                                                            <% } else { %>
+                                                                <td>
+                                                                    <a class="btn btn-danger"
+                                                                        href="/cancel-order/<%= order._id %>">Cancel</a>
+                                                                </td>
+                                                                <% } %>
                                             </tr>
                                         </form>
-                                            <% } %>
-                                                <% }) %>
+                                        <% } else if (order.paymentMethod=='online' ) { %>
+                                            <form action="/order-products/<%= order._id %>" method="post">
+                                                <tr>
+                                                    <td>
+                                                        <%= order.date.toLocaleDateString() %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.address.Address %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.address.Pincode %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.address.Mobile %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.total %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.paymentMethod %>
+                                                    </td>
+                                                    <td>
+                                                        <%= order.orderStatus %>
+                                                    </td>
+                                                    <td>
+                                                        <button type="submit" class="btn btn-success"
+                                                            href="">View</button>
+                                                    </td>
+                                                    <% if (order.orderStatus=='Cancelled' ) {%>
+                                                        <td>Cancelled</td>
+                                                        <% } else if (order.orderStatus=='Delivered' ) { %>
+                                                            <td>Delivered</td>
+                                                            <% } else if (order.orderStatus=='returned' ) { %>
+                                                                <td>Returned</td>
+                                                                <% } else { %>
+                                                                    <td>
+                                                                        <a class="btn btn-danger"
+                                                                            href="/cancel-order/<%= order._id %>">Cancel</a>
+                                                                    </td>
+                                                                    <% } %>
+                                                </tr>
+                                            </form>
+                                            <% } else if (order.paymentMethod=='wallet' ) { %>
+                                                <form action="/order-products/<%= order._id %>" method="post">
+                                                    <tr>
+                                                        <td>
+                                                            <%= order.date.toLocaleDateString() %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.address.Address %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.address.Pincode %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.address.Mobile %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.total %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.paymentMethod %>
+                                                        </td>
+                                                        <td>
+                                                            <%= order.orderStatus %>
+                                                        </td>
+                                                        <td>
+                                                            <button type="submit" class="btn btn-success"
+                                                                href="">View</button>
+                                                        </td>
+                                                        <% if (order.orderStatus=='Cancelled' ) {%>
+                                                            <td>Cancelled</td>
+                                                            <% } else if (order.orderStatus=='Delivered' ) { %>
+                                                                <td>Delivered</td>
+                                                                <% } else if (order.orderStatus=='returned' ) { %>
+                                                                    <td>Returned</td>
+                                                                    <% } else { %>
+                                                                        <td>
+                                                                            <a class="btn btn-danger"
+                                                                                href="/cancel-order/<%= order._id %>">Cancel</a>
+                                                                        </td>
+                                                                        <% } %>
+                                                    </tr>
+                                                </form>
+                                                <% } %>
+                                                    <% }) %>
                             </tbody>
                         </table>
                     </div>

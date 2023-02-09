@@ -89,7 +89,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-md-8" style="font-size: 16px;">
+                        <div class="col-md-6" style="font-size: 16px;">
                             <div class="card mb-3">
                                 <div class="card-body">
                                     <div class="row">
@@ -134,6 +134,12 @@
                                                 href="/profile-address">View
                                                 Address</a>
                                         </div>
+                                        <div id="collapseOne" class="collapse " aria-labelledby="headingOne"
+                                            data-parent="#accordionExample">
+                                            <div class="card-body">
+                                                <h5>Wallet Balance</h5>
+                                            </div>
+                                        </div>
                                         <div class="col-sm-3">
                                             <a class="btn btn-secondary mt-3" style="width: 115px ; font-size: 14px; "
                                                 href="/profile-orders">Your
@@ -143,11 +149,30 @@
                                 </div>
                             </div>
                         </div>
+                        <div class="col-md-2">
+                            <div class="text-center mt-4">
+                                <button type="button" href="" onclick="myFunction()"
+                                    class="btn btn-danger">Wallet</button>
+                            </div>
+                            <dialog class="mt-4" id="myDialog">
+                                <% if (userDetails.walletAmount > 0) { %>
+                                    RS.<%= userDetails.walletAmount %>
+                                    <% } else { %>
+                                        <p class="text-danger font-weight-bold">0 balance</p>
+                                    <% } %>
+                            </dialog>
+                        </div>
                     </div>
                 </div>
             </div>
     </body>
 
+    <script>
+        function myFunction() {
+          const element = document.getElementById("myDialog");
+          element.open = true;
+        }
+    </script>
 
     <!-- jQuery -->
     <script src="/javascripts/user/homejs/jquery.min.js"></script>

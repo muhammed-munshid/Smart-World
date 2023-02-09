@@ -32,6 +32,10 @@ const userSchema = new mongoose.Schema({
     usedCoupon: {
         type: Array,
     },
+    walletAmount: {
+        type:Number,
+        default:0
+    },
 })
 
 module.exports = userModel = mongoose.model('userData', userSchema)

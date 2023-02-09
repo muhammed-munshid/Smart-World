@@ -31,7 +31,7 @@
                     <div class="content-wrapper">
                         <!-- Content -->
 
-                        <div class="container-xxl flex-grow-1 container-p-y">
+                        <div class="container-xxl flex-grow-1 container-p-y mt-5">
                             <div class="row">
                                 <!-- Blockquote -->
                                 <div class="col-lg-6">
@@ -59,9 +59,14 @@
                                                     <%=order.paymentMethod%>
                                                 </dd>
 
-                                                <dt class="col-sm-3">Date and Time</dt>
+                                                <dt class="col-sm-3">Date</dt>
                                                 <dd class="col-sm-9">
-                                                    <%=order.date%>
+                                                    <%=order.date.toLocaleDateString()%>
+                                                </dd>
+
+                                                <dt class="col-sm-3">Time</dt>
+                                                <dd class="col-sm-9">
+                                                    <%=order.time%>
                                                 </dd>
                                             </dl>
                                         </div>
@@ -127,67 +132,111 @@
                         <div class="content-backdrop fade"></div>
                     </div>
 
-
-
-
-                    <section class="shopping-cart spad">
-                        <div class="container">
-                            <div class="row">
-                                <div class="col-lg-12">
-                                    <div class="shopping__cart__table">
-                                        <table class="table align-middle">
-                                            <thead>
-                                                <tr>
-                                                    <th>Product</th>
-                                                    <th>Price</th>
-                                                    <th>Quantity</th>
-                                                    <th>Discount</th>
-                                                    <th>Total</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                <tr>
-                                                    <% let items=order.products %>
-                                                        <% items.forEach(function(product){%>
-                                                            <td>
-                                                                <%= product.productName %>
-                                                            </td>
-                                                            <td>
-                                                                <%= product.productPrice %>
-                                                            </td>
-                                                            <td>
-                                                                <%= product.quantity %>
-                                                            </td>
-                                                        <% }) %>
-                                                            <td>
-                                                                <%= order.discount %>
-                                                            </td>
-                                                        <% items.forEach(function(product){%>
-                                                            <td>
-                                                                <%= product.productPrice %>
-                                                            </td>
-                                                        <% }) %>
-                                                </tr>
-                                                <tr>
-                                                    <td>Grand Total</td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td></td>
-                                                    <td>
-                                                        <%= order.total %>
-                                                    </td>
-                                                </tr>
-                                            </tbody>
-                                        </table>
-                                    </div>
+                    <% if (order.orderStatus=="returned" ) { %>
+                        <div class="wrapper">
+                            <div class="container-new">
+                                <div class="text-center">
+                                    <iconify-icon class="smile" icon="uil:smile-beam"></iconify-icon>
+                                    <h2 class="typing px-spc-b-20">Your order has been returned</h2>
                                 </div>
                             </div>
                         </div>
-                    </section>
+                        <% } else { %>
+                            <section class="shopping-cart spad">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+                                            <div class="shopping__cart__table">
+                                                <table class="table align-middle">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Product</th>
+                                                            <th>Price</th>
+                                                            <th>Quantity</th>
+                                                            <th>Discount</th>
+                                                            <th>Total</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <tr>
+                                                            <% let items=order.products %>
+                                                                <% items.forEach(function(product){%>
+                                                                    <td>
+                                                                        <%= product.productName %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.productPrice %>
+                                                                    </td>
+                                                                    <td>
+                                                                        <%= product.quantity %>
+                                                                    </td>
+                                                                    <% }) %>
+                                                                        <td>
+                                                                            <%= order.discount %>
+                                                                        </td>
+                                                                        <% items.forEach(function(product){%>
+                                                                            <td>
+                                                                                <%= product.productPrice %>
+                                                                            </td>
+                                                                            <% }) %>
+                                                        </tr>
+                                                        <tr>
+                                                            <td>Grand Total</td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td></td>
+                                                            <td>
+                                                                <%= order.total %>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+                            <% } %>
+
+                                <div class="text-center">
+                                    <% if(order.orderStatus=="Cancelled" ){ %>
+                                        <a class="btn btn-danger" href="#">Your order has been cancelled</a>
+                                        <% } else if (order.orderStatus=="Delivered" ) { %>
+                                            <a onclick="returnProduct('<%= order._id %>')" href="" type="button"
+                                                class="btn btn-outline-warning">Return order</a>
+                                            <%} else if(order.orderStatus=="returned" ){ %>
+                                                <a class="btn btn-warning" href="#">Your order has been returned</a>
+                                                <% }else{ %>
+                                                    <a href="/cancel-order/<%= order._id %>" type="button"
+                                                        class="btn btn-outline-danger">Cancel order</a>
+                                                    <% } %>
+                                                        <a class="btn btn-outline-primary" href="/">Go back to
+                                                            Shopping</a>
+                                </div>
+
                 </div>
             </section>
+
             <!-- Shopping Cart Section End -->
             <%- include('../partials/user-footer')%>
+                <script>
+                    async function returnProduct(orderId) {
+                        $.ajax({
+                            url: `/return-product/${orderId}`,
+                            method: "get",
+                            success: (response) => {
+                                Swal.fire({
+                                    position: "center",
+                                    icon: "success",
+                                    title: "Return and refund successfully",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true
+                                })
+                                window.location.href = '/profile-orders'
+                            }
+                        })
+                    }
+                </script>
     </body>
 
 </html>

@@ -42,6 +42,8 @@
                           <td style="font-size: 1rem;" class="text-danger font-weight-bold"><%=order.orderStatus%></td>
                        <%} else if(order.orderStatus=='Delivered') { %>
                         <td style="font-size: 1rem;" class="text-success font-weight-bold pr-1"><%=order.orderStatus%></td>
+                        <%} else if(order.orderStatus=='returned') { %>
+                          <td style="font-size: 1rem;" class="text-warning font-weight-bold pr-1"><%=order.orderStatus%></td>
                         <% }else{ %>
                         <td>
                           <select id="OStatus<%=order._id%>" style="width: 7.5rem;" onchange="statusOrder('<%=order._id%>')"

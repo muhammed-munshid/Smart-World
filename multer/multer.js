@@ -36,6 +36,11 @@ const resizeImages = async (req, res, next) => {
     req.files.map(async (file) => {
       const newFilename = `${file.fieldname}-${Date.now()}-${Math.random()}.png`;
       await sharp(file.buffer)
+        .resize(736, 800, {
+          fit: sharp.fit.contain,
+          background:{r:192,g:192,b:192,alpha:0},
+          withoutEnlargement: false
+        })
         .toFormat("png")
         .toFile(`./public/images/productImages/${newFilename}`);
       req.body.images.push(newFilename);
