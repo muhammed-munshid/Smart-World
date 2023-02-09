@@ -285,31 +285,11 @@ module.exports = {
             );
             let prodId = cartData.items[productIndex]
             let price = prodId.productPrice
-            console.log(price);
             let total = cartData.total
             let grandTotal = cartData.grandTotal
             const deleteTotal = total - price
             const deleteGrand = grandTotal - price
-            console.log(deleteTotal);
-            console.log(deleteGrand);
-            if (deleteTotal == 0) {
-                await cartModel.findOneAndUpdate({ user_id: userId }, {
-                    $set: {
-                        total: deleteTotal,
-                        grandTotal: deleteGrand,
-                        discount: 0
-                    },
-                    $pull: {
-                        items:
-                        {
-                            products: productId
-                        }
-                    }
-                })
-                    .then(() => {
-                        res.json({ deleted: true })
-                    })
-            } else {
+            if (grandTotal == null) {
                 await cartModel.findOneAndUpdate({ user_id: userId }, {
                     $pull: {
                         items:
@@ -326,11 +306,32 @@ module.exports = {
                     .then(() => {
                         res.json({ deleted: true })
                     })
+            } else {
+                await cartModel.findOneAndUpdate({ user_id: userId }, {
+                    $set: {
+                        total: deleteTotal,
+                        grandTotal: deleteGrand,
+                        discount: 0
+                    },
+                    $pull: {
+                        items:
+                        {
+                            products: productId
+                        }
+                    }
+                })
+                    .then(() => {
+                        res.json({ deleted: true })
+                    })
             }
         } catch (error) {
             res.render('user/404-page')
         }
     },
+
+
+
+
 
     deleteminusCart: async (req, res) => {
         try {
