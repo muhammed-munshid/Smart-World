@@ -285,28 +285,14 @@ module.exports = {
             );
             let prodId = cartData.items[productIndex]
             let price = prodId.productPrice
+            console.log(price);
             let total = cartData.total
             let grandTotal = cartData.grandTotal
             const deleteTotal = total - price
             const deleteGrand = grandTotal - price
-            if (deleteGrand == null) {
-                await cartModel.findOneAndUpdate({ user_id: userId }, {
-                    $pull: {
-                        items:
-                        {
-                            products: productId
-                        }
-                    }
-                })
-                await cartModel.updateOne({ user_id: userId }, {
-                    $set: {
-                        total: deleteTotal
-                    }
-                })
-                    .then(() => {
-                        res.json({ deleted: true })
-                    })
-            } else {
+            console.log(deleteTotal);
+            console.log(deleteGrand);
+            if (deleteTotal == 0) {
                 await cartModel.findOneAndUpdate({ user_id: userId }, {
                     $set: {
                         total: deleteTotal,
@@ -318,6 +304,23 @@ module.exports = {
                         {
                             products: productId
                         }
+                    }
+                })
+                    .then(() => {
+                        res.json({ deleted: true })
+                    })
+            } else {
+                await cartModel.findOneAndUpdate({ user_id: userId }, {
+                    $pull: {
+                        items:
+                        {
+                            products: productId
+                        }
+                    }
+                })
+                await cartModel.updateOne({ user_id: userId }, {
+                    $set: {
+                        total: deleteTotal
                     }
                 })
                     .then(() => {
@@ -386,7 +389,6 @@ module.exports = {
                     let amount = ((cart.total / 100) * coupon.discount).toFixed(0)
                     let grandTotal = cart.total - amount
                     let newCoupon = await cartModel.findOneAndUpdate({ userId }, { $set: { discount: { couponId: coupon._id, amount }, grandTotal } })
-                    console.log(newCoupon);
                     res.json({ success: true })
                 }
             } else {
@@ -809,7 +811,6 @@ module.exports = {
                         let orderId = order._id
                         let total = carts.total
                         let grandTotal = carts.grandTotal
-                        console.log('granftdotal:' + grandTotal);
                         let walletAmount = user.walletAmount
                         if (walletAmount == 0) {
                             res.json({ zeroWallet: true })

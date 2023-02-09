@@ -299,6 +299,7 @@
             </script>
             <script>
                 async function deleteCart(productId) {
+                    alert('one')
                     $.ajax({
                         url: `/delete-cart/${productId}`,
                         method: "get",
