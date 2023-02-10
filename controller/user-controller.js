@@ -527,7 +527,8 @@ module.exports = {
                             products: productId,
                             productImage: products.image,
                             productPrice: products.price,
-                            productName: products.name
+                            productName: products.name,
+                            totalPrice: products.price
                         }]
                     })
                     newCart.save()

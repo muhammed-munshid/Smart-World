@@ -112,7 +112,7 @@
             </script>
 
             <script>
-                async function wishtoCart(proId, productName, productPrice, productImage, total) {
+                async function wishtoCart(proId, productName, productPrice, productImage) {
                     $.ajax({
                         url: `/wishtoCart/${proId}`,
                         data: {
