@@ -1023,7 +1023,7 @@ module.exports = {
     },
 
     returnOrder: async (req, res) => {
-        try {
+        // try {
             const orderId = req.params.id;
             const userId = req.session.userId
             let orders = await orderModel.findOne({ _id: orderId })
@@ -1033,36 +1033,46 @@ module.exports = {
             let grandAmount = orders.grandTotal
             let totalWallet = totalAmount + walletAmount
             let grandWallet = grandAmount + walletAmount
-            await orderModel.findByIdAndUpdate(
-                { _id: orderId },
-                {
-                    $set:
-                    {
-                        orderStatus: "returned",
-                        paymentStatus: "refund success"
-                    }
-                }
-            )
             if (grandAmount == null) {
+                await orderModel.findByIdAndUpdate(
+                    { _id: orderId },
+                    {
+                        $set:
+                        {
+                            orderStatus: "returned",
+                            paymentStatus: "refund success"
+                        }
+                    }
+                )
                 await userModel.findOneAndUpdate({ _id: userId }, {
                     $set: {
                         walletAmount: totalWallet
                     }
-                }).then(() => {
-                    res.json({ return: true })
+                }).then((success) => {
+                    res.json({ status: true })
                 })
             } else {
+                await orderModel.findByIdAndUpdate(
+                    { _id: orderId },
+                    {
+                        $set:
+                        {
+                            orderStatus: "returned",
+                            paymentStatus: "refund success"
+                        }
+                    }
+                )
                 await userModel.findOneAndUpdate({ _id: userId }, {
                     $set: {
                         walletAmount: grandWallet
                     }
-                }).then(() => {
-                    res.json({ return: true })
+                }).then((success) => {
+                    res.json({ status: true })
                 })
             }
-        } catch (error) {
-            res.render('user/404-page')
-        }
+        // } catch (error) {
+        //     res.render('user/404-page')
+        // }
     },
 
     // SIGN UP PAGE

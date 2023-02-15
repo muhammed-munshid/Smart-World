@@ -39,12 +39,12 @@ module.exports = {
                 req.session.adminLogin = true
                 let Orders = await orderModel.find().populate('address').sort({ date: -1 })
                 let count = await orderModel.find().countDocuments()
-                let liveOrders = await orderModel.find({ orderStatus: { $nin: ["Delivered", "Cancelled"] } }).countDocuments()
+                let liveOrders = await orderModel.find({ orderStatus: { $nin: ["Delivered", "Cancelled","returned"] } }).countDocuments()
                 let users = await userModel.find({ block: false }).countDocuments()
                 let onlineCount = (await orderModel.find({ paymentMethod: 'online' })).length
                 let codCount = (await orderModel.find({ paymentMethod: 'COD' })).length
                 let online = await orderModel.aggregate([
-                    { '$match': { $and: [{ 'paymentMethod': 'online' }, { 'orderStatus': { '$ne': 'Cancelled' } }] } },
+                    { '$match': { $and: [{ 'paymentMethod': 'online' }, { 'orderStatus': { '$ne': [ 'Cancelled','returned' ] } }] } },
                     {
                         '$group': {
                             '_id': null, 'total': { '$sum': { '$ifNull': ["$total", 0] } },
@@ -53,7 +53,7 @@ module.exports = {
                     }
                 ])
                 let sales = await orderModel.aggregate([
-                    { '$match': { 'orderStatus': { '$ne': 'Cancelled' } } },
+                    { '$match': { 'orderStatus': { '$ne': [ 'Cancelled','returned' ] } } },
                     {
                         '$group': {
                             '_id': null, 'totalCount': { '$sum': { '$ifNull': ["$total", 0] } },
@@ -88,7 +88,7 @@ module.exports = {
         try {
             let Orders = await orderModel.find().populate('address').sort({ date: -1 })
             let count = await orderModel.find().countDocuments()
-            let liveOrders = await orderModel.find({ orderStatus: { $nin: ["Delivered", "Cancelled"] } }).countDocuments()
+            let liveOrders = await orderModel.find({ orderStatus: { $nin: ["Delivered", "Cancelled","returned"] } }).countDocuments()
             let users = await userModel.find({ block: false }).countDocuments()
             let onlineCount = (await orderModel.find({ paymentMethod: 'online' })).length
             let codCount = (await orderModel.find({ paymentMethod: 'COD' })).length

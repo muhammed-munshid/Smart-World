@@ -202,8 +202,8 @@
                                     <% if(order.orderStatus=="Cancelled" ){ %>
                                         <a class="btn btn-danger" href="#">Your order has been cancelled</a>
                                         <% } else if (order.orderStatus=="Delivered" ) { %>
-                                            <a onclick="returnProduct('<%= order._id %>')" href="" type="button"
-                                                class="btn btn-outline-warning">Return order</a>
+                                            <button onclick="returnProduct('<%= order._id %>')" type="button"
+                                                class="btn btn-outline-warning">Return order</button>
                                             <%} else if(order.orderStatus=="returned" ){ %>
                                                 <a class="btn btn-warning" href="#">Your order has been returned</a>
                                                 <% }else{ %>
@@ -225,7 +225,8 @@
                             url: `/return-product/${orderId}`,
                             method: "get",
                             success: (response) => {
-                                Swal.fire({
+                                if (response.status) {
+                                    Swal.fire({
                                     position: "center",
                                     icon: "success",
                                     title: "Return and refund successfully",
@@ -233,10 +234,20 @@
                                     showConfirmButton: true
                                 })
                                 window.location.href = '/profile-orders'
+                                } else {
+                                    Swal.fire({
+                                    position: "center",
+                                    icon: "error",
+                                    title: "Something porblem, Try Again!",
+                                    customClass: "swal-wide",
+                                    showConfirmButton: true
+                                })
+                                window.location.href = '/profile-orders'
+                                }
                             }
                         })
                     }
                 </script>
-    </body>
+    </body> 
 
 </html>
