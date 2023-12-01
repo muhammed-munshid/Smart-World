@@ -14,6 +14,8 @@ const mongoose = require('mongoose')
 const homeRouter=require('./routes/home');
 const adminRouter=require('./routes/admin');
 
+mongoose.set("strictQuery", false);
+
 const app=express();
 
 app.use((req,res,next)=>{
